@@ -30,6 +30,7 @@ import quiz.repository.AuthorityRepository;
 import quiz.repository.AvatarRepository;
 import quiz.repository.PlayerRepository;
 import quiz.repository.UserRepository;
+import quiz.security.AuthoritiesConstants;
 import quiz.security.SecurityUtils;
 import quiz.service.PlayerService;
 import quiz.service.SocialService;
@@ -59,15 +60,7 @@ public class UserService {
    @Inject
    private PlayerRepository playerRepository;
 
-//   public Optional activateRegistration(String key) {
-//      this.log.debug("Activating user for activation key {}", key);
-//      return this.userRepository.findOneByActivationKey(key).map((user) -> {
-//         user.setActivated(true);
-//         user.setActivationKey((String)null);
-//         this.log.debug("Activated user: {}", user);
-//         return user;
-//      });
-//   }
+
 
    public Optional completePasswordReset(String newPassword, String key) {
       this.log.debug("Reset user password for reset key {}", key);
@@ -90,7 +83,7 @@ public class UserService {
       return Boolean.valueOf(result.isPresent());
    }
 
-   public Optional requestPasswordReset(String mail) {
+   public Optional<User> requestPasswordReset(String mail) {
       return this.userRepository.findOneByLogin(mail).filter(User::isActivated).map((user) -> {
          user.setResetKey(RandomUtil.generateResetKey());
          user.setResetDate(ZonedDateTime.now());
@@ -100,8 +93,8 @@ public class UserService {
 
    public User createUser(String login, String password, String langKey) {
       User newUser = new User();
-      Authority authority = (Authority)this.authorityRepository.findOne("ROLE_USER");
-      HashSet authorities = new HashSet();
+       Authority authority = authorityRepository.findOne(AuthoritiesConstants.USER);
+       Set<Authority> authorities = new HashSet<>();
       String encryptedPassword = this.passwordEncoder.encode(password);
       newUser.setLogin(login);
       newUser.setPassword(encryptedPassword);
@@ -115,8 +108,8 @@ public class UserService {
 
    public User createUser(ManagedCreateUserVM managedCreateUserVM) {
       User newUser = new User();
-      Authority authority = (Authority)this.authorityRepository.findOne("ROLE_USER");
-      HashSet authorities = new HashSet();
+      Authority authority = authorityRepository.findOne(AuthoritiesConstants.USER);
+      Set<Authority> authorities = new HashSet<>();
       authorities.add(authority);
       String encryptedPassword = this.passwordEncoder.encode(managedCreateUserVM.getPassword());
       newUser.setLogin(managedCreateUserVM.getLogin());
@@ -140,32 +133,32 @@ public class UserService {
       return newUser;
    }
 
-   public User createUser(ManagedUserVM managedUserVM) {
-      User user = new User();
-      user.setLogin(managedUserVM.getLogin());
-      if(managedUserVM.getLangKey() == null) {
-         user.setLangKey("ru");
-      } else {
-         user.setLangKey(managedUserVM.getLangKey());
-      }
-
-      if(managedUserVM.getAuthorities() != null) {
-         HashSet encryptedPassword = new HashSet();
-         managedUserVM.getAuthorities().forEach((authority) -> {
-            encryptedPassword.add(this.authorityRepository.findOne(authority));
-         });
-         user.setAuthorities(encryptedPassword);
-      }
-
-      String encryptedPassword1 = this.passwordEncoder.encode(RandomUtil.generatePassword());
-      user.setPassword(encryptedPassword1);
-      user.setResetKey(RandomUtil.generateResetKey());
-      user.setResetDate(ZonedDateTime.now());
-      user.setActivated(true);
-      this.userRepository.save(user);
-      this.log.debug("Created Information for User: {}", user);
-      return user;
-   }
+//   public User createUser(ManagedUserVM managedUserVM) {
+//      User user = new User();
+//      user.setLogin(managedUserVM.getLogin());
+//      if(managedUserVM.getLangKey() == null) {
+//         user.setLangKey("ru");
+//      } else {
+//         user.setLangKey(managedUserVM.getLangKey());
+//      }
+//
+//      if(managedUserVM.getAuthorities() != null) {
+//         HashSet encryptedPassword = new HashSet();
+//         managedUserVM.getAuthorities().forEach((authority) -> {
+//            encryptedPassword.add(this.authorityRepository.findOne(authority));
+//         });
+//         user.setAuthorities(encryptedPassword);
+//      }
+//
+//      String encryptedPassword1 = this.passwordEncoder.encode(RandomUtil.generatePassword());
+//      user.setPassword(encryptedPassword1);
+//      user.setResetKey(RandomUtil.generateResetKey());
+//      user.setResetDate(ZonedDateTime.now());
+//      user.setActivated(true);
+//      this.userRepository.save(user);
+//      this.log.debug("Created Information for User: {}", user);
+//      return user;
+//   }
 
    public void updateUser(String langKey) {
       this.userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent((user) -> {
@@ -174,21 +167,24 @@ public class UserService {
       });
    }
 
-   public void updateUser(Long id, String login, boolean activated, String langKey, Set authorities) {
-      Optional.of(this.userRepository.findOne(id)).ifPresent((user) -> {
-         user.setLogin(login);
-         user.setActivated(activated);
-         user.setLangKey(langKey);
-         Set managedAuthorities = user.getAuthorities();
-         managedAuthorities.clear();
-         authorities.forEach((authority) -> {
-            managedAuthorities.add(this.authorityRepository.findOne(authority));
-         });
-         this.log.debug("Changed Information for User: {}", user);
-      });
-   }
+    public void updateUser(Long id, String login, boolean activated, String langKey, Set<String> authorities) {
+        Optional.of(userRepository
+            .findOne(id))
+            .ifPresent(user -> {
+                user.setLogin(login);
+                user.setActivated(activated);
+                user.setLangKey(langKey);
+                Set<Authority> managedAuthorities = user.getAuthorities();
+                managedAuthorities.clear();
+                authorities.forEach(
+                    authority -> managedAuthorities.add(authorityRepository.findOne(authority))
+                );
+                log.debug("Changed Information for User: {}", user);
+            });
+    }
 
-   public void deleteUser(String login) {
+
+    public void deleteUser(String login) {
       this.userRepository.findOneByLogin(login).ifPresent((user) -> {
          this.socialService.deleteUserSocialConnection(user.getLogin());
          this.userRepository.delete(user);

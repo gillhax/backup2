@@ -20,6 +20,7 @@ import quiz.service.dto.AvatarDto;
 import quiz.service.dto.CategoryDto;
 import quiz.service.dto.OfferTraditionDtoIn;
 import quiz.service.dto.VersionDto;
+import quiz.service.util.ParseQuestionsFile;
 import quiz.system.error.handler.dto.ResponseDto;
 import quiz.system.util.StaticWrapper;
 
@@ -92,7 +93,7 @@ public class DataController {
       response = OfferTraditionDtoIn.class
    )
    public ResponseDto offerTradition(@RequestBody OfferTraditionDtoIn offerTraditionDtoIn) {
-      this.offerTraditionService.create(this.userService.getUserWithAuthorities(), offerTraditionDtoIn);
+      this.offerTraditionService.create(offerTraditionDtoIn);
       return StaticWrapper.wrap();
    }
 

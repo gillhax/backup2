@@ -25,12 +25,16 @@ public class CustomSocialUsersConnectionRepository implements UsersConnectionRep
    public List findUserIdsWithConnection(Connection connection) {
       ConnectionKey key = connection.getKey();
       List socialUserConnections = this.socialUserConnectionRepository.findAllByProviderIdAndProviderUserId(key.getProviderId(), key.getProviderUserId());
-      return (List)socialUserConnections.stream().map(SocialUserConnection::getUserId).collect(Collectors.toList());
+       //TODO::SOME SHIT, FIX!
+       return null;
+       //   return (List)socialUserConnections.stream().map(SocialUserConnection::getUserId).collect(Collectors.toList());
    }
 
    public Set findUserIdsConnectedTo(String providerId, Set providerUserIds) {
       List socialUserConnections = this.socialUserConnectionRepository.findAllByProviderIdAndProviderUserIdIn(providerId, providerUserIds);
-      return (Set)socialUserConnections.stream().map(SocialUserConnection::getUserId).collect(Collectors.toSet());
+       //TODO::SOME SHIT, FIX!
+       return null;
+    //  return (Set)socialUserConnections.stream().map(SocialUserConnection::getUserId).collect(Collectors.toSet());
    }
 
    public ConnectionRepository createConnectionRepository(String userId) {

@@ -2,7 +2,12 @@ package quiz.repository;
 
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import quiz.domain.Question;
 
-public interface QuestionRepository extends JpaRepository {
-   Optional findOneByTitle(String var1);
+@Repository
+public interface QuestionRepository extends JpaRepository<Question,Long> {
+
+    Optional<Question> findOneByTitle(String title);
+
 }

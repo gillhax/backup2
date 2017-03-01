@@ -150,7 +150,9 @@ public class CustomSocialConnectionRepository implements ConnectionRepository {
 
    private Double getNewMaxRank(String providerId) {
       List socialUserConnections = this.socialUserConnectionRepository.findAllByUserIdAndProviderIdOrderByRankAsc(this.userId, providerId);
-      return Double.valueOf(socialUserConnections.stream().mapToDouble(SocialUserConnection::getRank).max().orElse(0.0D) + 1.0D);
+      //TODO::SOME SHIT, FIX!
+       return null;
+ //     return Double.valueOf(socialUserConnections.stream().mapToDouble(SocialUserConnection::getRank).max().orElse(0.0D) + 1.0D);
    }
 
    private Connection findPrimaryConnection(String providerId) {
@@ -169,7 +171,9 @@ public class CustomSocialConnectionRepository implements ConnectionRepository {
    }
 
    private List socialUserConnectionsToConnections(List socialUserConnections) {
-      return (List)socialUserConnections.stream().map(this::socialUserConnectionToConnection).collect(Collectors.toList());
+       //TODO::SOME SHIT, FIX!
+       return null;
+//      return (List)socialUserConnections.stream().map(this::socialUserConnectionToConnection).collect(Collectors.toList());
    }
 
    private Connection socialUserConnectionToConnection(SocialUserConnection socialUserConnection) {

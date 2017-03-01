@@ -3,6 +3,7 @@ package quiz.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -24,6 +25,7 @@ import quiz.domain.Avatar;
 import quiz.service.AvatarService;
 import quiz.service.ImageService;
 import quiz.service.VersionService;
+import quiz.service.util.ParseQuestionsFile;
 import quiz.web.rest.util.HeaderUtil;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -62,6 +64,27 @@ public class AvatarResource {
       Avatar result = this.avatarService.update(id, image);
       this.versionService.refreshAvatars();
       return ((BodyBuilder)ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert("avatar", this.toString()))).body(result);
+   }
+
+
+
+
+
+    @Inject
+    private ParseQuestionsFile parseQuestionsFile;
+
+    @Timed
+   @RequestMapping(
+      value = {"/account/testParser"},
+      method = {RequestMethod.POST},
+      produces = {"application/json;charset=UTF-8"},
+      consumes = {"multipart/form-data"}
+   )
+   public ResponseEntity updateAvatar(@RequestParam MultipartFile image) throws URISyntaxException {
+        List<MultipartFile> files = new ArrayList<>();
+        files.add(image);
+       parseQuestionsFile.main(files);
+       return null;
    }
 
    @ApiIgnore

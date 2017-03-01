@@ -3,22 +3,25 @@ package quiz.repository;
 import java.util.List;
 import java.util.Set;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import quiz.domain.SocialUserConnection;
 
-public interface SocialUserConnectionRepository extends JpaRepository {
-   List findAllByProviderIdAndProviderUserId(String var1, String var2);
+@Repository
+public interface SocialUserConnectionRepository extends JpaRepository<SocialUserConnection, Long> {
 
-   List findAllByProviderIdAndProviderUserIdIn(String var1, Set var2);
+    List<SocialUserConnection> findAllByProviderIdAndProviderUserId(String providerId, String providerUserId);
 
-   List findAllByUserIdOrderByProviderIdAscRankAsc(String var1);
+    List<SocialUserConnection> findAllByProviderIdAndProviderUserIdIn(String providerId, Set<String> providerUserIds);
 
-   List findAllByUserIdAndProviderIdOrderByRankAsc(String var1, String var2);
+    List<SocialUserConnection> findAllByUserIdOrderByProviderIdAscRankAsc(String userId);
 
-   List findAllByUserIdAndProviderIdAndProviderUserIdIn(String var1, String var2, List var3);
+    List<SocialUserConnection> findAllByUserIdAndProviderIdOrderByRankAsc(String userId, String providerId);
 
-   SocialUserConnection findOneByUserIdAndProviderIdAndProviderUserId(String var1, String var2, String var3);
+    List<SocialUserConnection> findAllByUserIdAndProviderIdAndProviderUserIdIn(String userId, String providerId, List<String> provideUserId);
 
-   void deleteByUserIdAndProviderId(String var1, String var2);
+    SocialUserConnection findOneByUserIdAndProviderIdAndProviderUserId(String userId, String providerId, String providerUserId);
 
-   void deleteByUserIdAndProviderIdAndProviderUserId(String var1, String var2, String var3);
+    void deleteByUserIdAndProviderId(String userId, String providerId);
+
+    void deleteByUserIdAndProviderIdAndProviderUserId(String userId, String providerId, String providerUserId);
 }

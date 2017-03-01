@@ -53,18 +53,18 @@ public class UserResource {
    @Inject
    private PlayerConverter playerConverter;
 
-   @PostMapping({"/users"})
-   @Timed
-   @Secured({"ROLE_ADMIN"})
-   public ResponseEntity createUser(@RequestBody ManagedUserVM managedUserVM) throws URISyntaxException {
-      this.log.debug("REST request to save User : {}", managedUserVM);
-      if(this.userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase()).isPresent()) {
-         return ((BodyBuilder)ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("userManagement", "emailexists", "Email already in use"))).body((Object)null);
-      } else {
-         User newUser = this.userService.createUser(managedUserVM);
-         return ((BodyBuilder)ResponseEntity.created(new URI("/api/users/" + newUser.getLogin())).headers(HeaderUtil.createAlert("userManagement.created", newUser.getLogin()))).body(newUser);
-      }
-   }
+//   @PostMapping({"/users"})
+//   @Timed
+//   @Secured({"ROLE_ADMIN"})
+//   public ResponseEntity createUser(@RequestBody ManagedUserVM managedUserVM) throws URISyntaxException {
+//      this.log.debug("REST request to save User : {}", managedUserVM);
+//      if(this.userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase()).isPresent()) {
+//         return ((BodyBuilder)ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("userManagement", "emailexists", "Email already in use"))).body((Object)null);
+//      } else {
+//         User newUser = this.userService.createUser(managedUserVM);
+//         return ((BodyBuilder)ResponseEntity.created(new URI("/api/users/" + newUser.getLogin())).headers(HeaderUtil.createAlert("userManagement.created", newUser.getLogin()))).body(newUser);
+//      }
+//   }
 
    @PutMapping({"/users"})
    @Timed
@@ -83,7 +83,7 @@ public class UserResource {
    @GetMapping({"/users"})
    @Timed
    public ResponseEntity getAllUsers(@ApiParam Pageable pageable) throws URISyntaxException {
-      Page page = this.userRepository.findAllWithAuthorities(pageable);
+      Page<User> page = this.userRepository.findAllWithAuthorities(pageable);
       List managedUserVMs = (List)page.getContent().stream().map(ManagedUserVM::new).collect(Collectors.toList());
       HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
       return new ResponseEntity(managedUserVMs, headers, HttpStatus.OK);
@@ -93,7 +93,7 @@ public class UserResource {
    @Timed
    public ResponseEntity getUser(@PathVariable String login) {
       this.log.debug("REST request to get User : {}", login);
-      return (ResponseEntity)this.userService.getUserWithAuthoritiesByLogin(login).map(ManagedUserVM::new).map((managedUserVM) -> {
+      return (ResponseEntity)this.userService.getUserWithAuthoritiesByLogin(login).map((managedUserVM) -> {
          return new ResponseEntity(managedUserVM, HttpStatus.OK);
       }).orElse(new ResponseEntity(HttpStatus.NOT_FOUND));
    }

@@ -8,23 +8,29 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import quiz.domain.User;
 
-public interface UserRepository extends JpaRepository {
-   Optional findOneByActivationKey(String var1);
+@Repository
+@Transactional
+public interface UserRepository extends JpaRepository<User, Long> {
 
-   List findAllByActivatedIsFalseAndCreatedDateBefore(ZonedDateTime var1);
+    Optional<User> findOneByActivationKey(String activationKey);
 
-   Optional findOneByResetKey(String var1);
+    List<User> findAllByActivatedIsFalseAndCreatedDateBefore(ZonedDateTime dateTime);
 
-   Optional findOneByLogin(String var1);
+    Optional<User> findOneByResetKey(String resetKey);
+
+    Optional<User> findOneByLogin(String login);
+
 
    @Query("select u.id from User u where u.login = :login")
-   Long findIdByLogin(@Param("login") String var1);
+   Long findIdByLogin(@Param("login") String login);
 
    @Query(
       value = "select distinct user from User user left join fetch user.authorities",
       countQuery = "select count(user) from User user"
    )
-   Page findAllWithAuthorities(Pageable var1);
+   Page<User> findAllWithAuthorities(Pageable pageable);
 }

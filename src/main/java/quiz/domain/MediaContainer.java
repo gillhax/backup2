@@ -24,84 +24,84 @@ import quiz.domain.util.ImageUrlJsonSerializer;
 
 @Entity
 @Table(
-   name = "media_container"
+    name = "media_container"
 )
 @Cache(
-   usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE
+    usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE
 )
 public class MediaContainer implements Serializable {
-   @Id
-   @GeneratedValue(
-      strategy = GenerationType.AUTO
-   )
-   private Long id;
-   @NotNull
-   @Column(
-      name = "media_type",
-      length = 20
-   )
-   @Enumerated(EnumType.STRING)
-   private MediaType mediaType;
-   @Size(
-      min = 1,
-      max = 512
-   )
-   @NotNull
-   @Column(
-      name = "media",
-      length = 512
-   )
-   @JsonSerialize(
-      using = ImageUrlJsonSerializer.class
-   )
-   private String media;
-   @OneToMany(
-      mappedBy = "media",
-      fetch = FetchType.LAZY
-   )
-   @JsonIgnore
-   private List questions;
+    @Id
+    @GeneratedValue(
+        strategy = GenerationType.AUTO
+    )
+    private Long id;
+    @NotNull
+    @Column(
+        name = "media_type",
+        length = 20
+    )
+    @Enumerated(EnumType.STRING)
+    private MediaType mediaType;
+    @Size(
+        min = 1,
+        max = 512
+    )
+    @NotNull
+    @Column(
+        name = "media",
+        length = 512
+    )
+    @JsonSerialize(
+        using = ImageUrlJsonSerializer.class
+    )
+    private String media;
+    @OneToMany(
+        mappedBy = "media",
+        fetch = FetchType.LAZY
+    )
+    @JsonIgnore
+    private List<Question> questions;
 
-   public Long getId() {
-      return this.id;
-   }
+    public Long getId() {
+        return this.id;
+    }
 
-   public MediaType getMediaType() {
-      return this.mediaType;
-   }
+    public MediaType getMediaType() {
+        return this.mediaType;
+    }
 
-   public String getMedia() {
-      return this.media;
-   }
+    public String getMedia() {
+        return this.media;
+    }
 
-   public List getQuestions() {
-      return this.questions;
-   }
+    public List<Question> getQuestions() {
+        return this.questions;
+    }
 
-   public void setId(Long id) {
-      this.id = id;
-   }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-   public void setMediaType(MediaType mediaType) {
-      this.mediaType = mediaType;
-   }
+    public void setMediaType(MediaType mediaType) {
+        this.mediaType = mediaType;
+    }
 
-   public void setMedia(String media) {
-      this.media = media;
-   }
+    public void setMedia(String media) {
+        this.media = media;
+    }
 
-   public void setQuestions(List questions) {
-      this.questions = questions;
-   }
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
 
-   @ConstructorProperties({"id", "mediaType", "media", "questions"})
-   public MediaContainer(Long id, MediaType mediaType, String media, List questions) {
-      this.id = id;
-      this.mediaType = mediaType;
-      this.media = media;
-      this.questions = questions;
-   }
+    @ConstructorProperties({"id", "mediaType", "media", "questions"})
+    public MediaContainer(Long id, MediaType mediaType, String media, List<Question> questions) {
+        this.id = id;
+        this.mediaType = mediaType;
+        this.media = media;
+        this.questions = questions;
+    }
 
-   public MediaContainer() {
-   }
+    public MediaContainer() {
+    }
 }

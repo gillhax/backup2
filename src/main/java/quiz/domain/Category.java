@@ -46,7 +46,7 @@ public class Category implements Serializable {
       mappedBy = "category",
       fetch = FetchType.LAZY
    )
-   private List subcategories;
+   private List<Subcategory> subcategories;
 
    public boolean equals(Object o) {
       if(this == o) {

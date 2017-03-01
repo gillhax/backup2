@@ -115,7 +115,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
    @Cache(
       usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE
    )
-   private Set authorities = new HashSet();
+   private Set<Authority> authorities = new HashSet();
 
    public boolean equals(Object o) {
       if(this == o) {

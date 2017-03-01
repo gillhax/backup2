@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Value;
 
-public class ImageUrlJsonSerializer extends JsonSerializer {
+public class ImageUrlJsonSerializer extends JsonSerializer<String> {
    private static String baseUri;
 
    @Value("${project.base-uri}")

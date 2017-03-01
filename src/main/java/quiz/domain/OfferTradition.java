@@ -51,7 +51,7 @@ public class OfferTradition {
       mappedBy = "offerId",
       fetch = FetchType.LAZY
    )
-   List attaches;
+   List<OfferTraditionAttach> attaches;
 
    public Long getId() {
       return this.id;
@@ -73,7 +73,7 @@ public class OfferTradition {
       return this.withAttaches;
    }
 
-   public List getAttaches() {
+   public List<OfferTraditionAttach> getAttaches() {
       return this.attaches;
    }
 

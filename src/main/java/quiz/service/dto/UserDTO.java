@@ -28,7 +28,7 @@ public class UserDTO {
    }
 
    public UserDTO(User user) {
-      this(user.getLogin(), user.isActivated(), user.getLangKey(), (Set)user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet()));
+      this(user.getLogin(), user.isActivated(), user.getLangKey(), user.getAuthorities());
    }
 
    public UserDTO(String login, boolean activated, String langKey, Set authorities) {

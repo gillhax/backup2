@@ -55,7 +55,7 @@ public class Subcategory implements Serializable {
       fetch = FetchType.LAZY,
       targetEntity = Question.class
    )
-   private List questions;
+   private List<Question> questions;
 
    public boolean equals(Object o) {
       if(this == o) {

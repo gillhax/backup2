@@ -55,7 +55,7 @@ public class Question implements Serializable {
    @JoinColumn(
       name = "media_id"
    )
-   MediaContainer media;
+   private MediaContainer media;
    @NotNull
    @Size(
       min = 1,

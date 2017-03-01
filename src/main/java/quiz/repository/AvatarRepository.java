@@ -1,6 +1,9 @@
 package quiz.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import quiz.domain.Avatar;
 
-public interface AvatarRepository extends JpaRepository {
+@Repository
+public interface AvatarRepository extends JpaRepository<Avatar, Integer> {
 }

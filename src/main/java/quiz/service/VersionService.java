@@ -16,35 +16,35 @@ public class VersionService {
    private VersionRepository versionRepository;
 
    public void refreshAvatars() {
-      Version version = (Version)this.versionRepository.getOne(Integer.valueOf(1));
+      Version version = versionRepository.getOne(1);
       ApiAssert.notFound(version == null, "not-found.entity");
       version.setAvatars(new Timestamp(System.currentTimeMillis()));
       this.versionRepository.flush();
    }
 
    public void refreshCategories() {
-      Version version = (Version)this.versionRepository.getOne(Integer.valueOf(1));
+      Version version = versionRepository.getOne(1);
       ApiAssert.notFound(version == null, "not-found.entity");
       version.setCategories(new Timestamp(System.currentTimeMillis()));
       this.versionRepository.flush();
    }
 
    public void refreshHelps() {
-      Version version = (Version)this.versionRepository.getOne(Integer.valueOf(1));
+      Version version = versionRepository.getOne(1);
       ApiAssert.notFound(version == null, "not-found.entity");
       version.setHelps(new Timestamp(System.currentTimeMillis()));
       this.versionRepository.flush();
    }
 
    public void refreshQuestions() {
-      Version version = (Version)this.versionRepository.getOne(Integer.valueOf(1));
+      Version version = versionRepository.getOne(1);
       ApiAssert.notFound(version == null, "not-found.entity");
       version.setQuestions(new Timestamp(System.currentTimeMillis()));
       this.versionRepository.flush();
    }
 
    public VersionDto getVersions() {
-      Version version = (Version)this.versionRepository.getOne(Integer.valueOf(1));
+      Version version = versionRepository.getOne(1);
       ApiAssert.notFound(version == null, "not-found.entity");
       VersionDto versionDto = new VersionDto();
       versionDto.setAvatars(version.getAvatars().getTime());
