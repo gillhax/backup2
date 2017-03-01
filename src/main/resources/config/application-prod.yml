@@ -10,14 +10,20 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 project:
-  base-uri: http://quiz.balina.ga
-  image-folder: /home/balina/Projects/quiz/temp/images
+    base-uri: http://quiz.balina.ga
+    image-folder: /home/balina/Projects/quiz/temp/images
+
+    security:
+      access-token:
+        length: 64
+        symbols: 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
+        max-count: 10
 
 spring:
     mail:
         host: smtp.gmail.com
         port: 587
-        username: avenger012@gmail.com  #Replace this field with your Gmail username.
+        login: avenger012@gmail.com  #Replace this field with your Gmail login.
         password: fybvtrfdfq           #Replace this field with your Gmail password.
         protocol: smtp
         tls: true
@@ -85,12 +91,6 @@ jhipster:
     cache: # Hibernate 2nd level cache, used by CacheConfiguration
         ehcache:
             maxBytesLocalHeap: 256M
-    security:
-        authentication:
-            jwt:
-                secret: acb1d41d06384587809d97e5888995538624e102
-                # Token is valid 24 hours
-                tokenValidityInSeconds: 86400
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: quiz@localhost
         baseUrl: http://127.0.0.1:8080 # Modify according to your server's URL

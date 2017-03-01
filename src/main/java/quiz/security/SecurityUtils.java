@@ -1,10 +1,8 @@
 package quiz.security;
 
-import java.util.function.Predicate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public final class SecurityUtils {
@@ -26,8 +24,8 @@ public final class SecurityUtils {
 
    public static Long getCurrentUserId() {
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      User user = (User)authentication.getPrincipal();
-      return Long.valueOf(user.getUsername());
+       quiz.domain.User user = (quiz.domain.User) authentication.getPrincipal();
+       return user.getId();
    }
 
    public static boolean isAuthenticated() {

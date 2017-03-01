@@ -88,7 +88,7 @@ jhipster:
         from: quiz@localhost
     swagger:
         title: quiz API
-        description: Викторина народы России
+        description: Приложение Дружба народов
         version: 0.0.1
         termsOfServiceUrl:
         contactName:

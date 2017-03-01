@@ -33,6 +33,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <jcache.version>1.0.0</jcache.version>
         <javax.inject.version>1</javax.inject.version>
+        <javax.inject.version>1</javax.inject.version>
         <liquibase.version>3.5.3</liquibase.version>
         <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
         <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
@@ -614,7 +615,7 @@
                     <url>jdbc:mysql://localhost:3306/quiz</url>
                     <defaultSchemaName>quiz</defaultSchemaName>
                     <username>root</username>
-                    <password></password>
+                    <password>123</password>
                     <referenceUrl>hibernate:spring:quiz.domain?dialect=org.hibernate.dialect.MySQL5InnoDBDialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                     <verbose>true</verbose>
                     <logging>debug</logging>

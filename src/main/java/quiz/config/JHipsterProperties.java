@@ -382,7 +382,7 @@ public class JHipsterProperties {
    }
 
    public static class Mail {
-      private String from = "Викторина! Восстановление пароля";
+       private String from = "Приложение Дружба народов! Восстановление пароля";
       private String baseUrl = "smtp.gmail.com";
 
       public String getFrom() {

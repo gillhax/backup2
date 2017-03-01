@@ -11,13 +11,18 @@
 # ===================================================================
 project:
   base-uri: http://localhost:8080
-  image-folder: /home/gill/Projects/quiz/temp/images
+  image-folder: /home/gillhax/Projects/quiz/temp/images
+  security:
+    access-token:
+      length: 64
+      symbols: 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
+      max-count: 10
 
 spring:
     mail:
         host: smtp.gmail.com
         port: 587
-        username: avenger012@gmail.com  #Replace this field with your Gmail username.
+        login: avenger012@gmail.com  #Replace this field with your Gmail login.
         password: fybvtrfdfq           #Replace this field with your Gmail password.
         protocol: smtp
         tls: true
@@ -41,7 +46,7 @@ spring:
         url: jdbc:mysql://localhost:3306/quiz?useUnicode=true&characterEncoding=utf8&useSSL=false
         name: quiz
         username: root
-        password:
+        password: 123
         hikari:
             data-source-properties:
                 cachePrepStmts: true
@@ -82,12 +87,6 @@ jhipster:
     cache: # Hibernate 2nd level cache, used by CacheConfiguration
         ehcache:
             maxBytesLocalHeap: 16M
-    security:
-        authentication:
-            jwt:
-                secret: my-secret-token-to-change-in-production
-                # Token is valid 24 hours
-                tokenValidityInSeconds: 86400
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         graphite:

@@ -1,15 +1,15 @@
 package quiz.converter;
 
-import java.util.HashSet;
 import org.springframework.stereotype.Component;
-import quiz.converter.Converter;
 import quiz.domain.MediaContainer;
 import quiz.domain.Question;
 import quiz.service.dto.AnswerDto;
 import quiz.service.dto.QuestionDto;
 
+import java.util.HashSet;
+
 @Component
-public class QuestionConverter extends Converter {
+public class QuestionConverter extends Converter<Question, QuestionDto> {
    public QuestionDto toDTO(Question question) {
       if(question == null) {
          return null;
@@ -25,8 +25,8 @@ public class QuestionConverter extends Converter {
             questionDto.setMedia(mediaContainer.getMedia());
          }
 
-         HashSet answers = new HashSet();
-         int right = question.getRightAnswer().intValue();
+          HashSet<AnswerDto> answers = new HashSet<>();
+          int right = question.getRightAnswer();
          answers.add(new AnswerDto(question.getAnswer1(), right == 1));
          answers.add(new AnswerDto(question.getAnswer2(), right == 2));
          answers.add(new AnswerDto(question.getAnswer3(), right == 3));

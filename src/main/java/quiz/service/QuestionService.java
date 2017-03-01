@@ -1,7 +1,5 @@
 package quiz.service;
 
-import java.util.List;
-import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -14,16 +12,23 @@ import quiz.repository.QuestionRepository;
 import quiz.service.dto.QuestionDto;
 import quiz.system.error.ApiAssert;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class QuestionService {
    private final Logger log = LoggerFactory.getLogger(QuestionService.class);
-   @Inject
-   private QuestionRepository questionRepository;
-   @Inject
-   private QuestionConverter questionConverter;
 
-   public Question save(Question question) {
+    private final QuestionRepository questionRepository;
+
+    private final QuestionConverter questionConverter;
+
+    public QuestionService(QuestionRepository questionRepository, QuestionConverter questionConverter) {
+        this.questionRepository = questionRepository;
+        this.questionConverter = questionConverter;
+    }
+
+    public Question save(Question question) {
       this.log.debug("Request to save Question : {}", question);
       Question result = (Question)this.questionRepository.save(question);
       return result;

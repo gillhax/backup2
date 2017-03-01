@@ -17,7 +17,7 @@ spring:
     mail:
         host: smtp.gmail.com
         port: 587
-        username: avenger012@gmail.com  #Replace this field with your Gmail username.
+        login: avenger012@gmail.com  #Replace this field with your Gmail login.
         password: fybvtrfdfq           #Replace this field with your Gmail password.
         protocol: smtp
         tls: true
@@ -39,7 +39,7 @@ spring:
         type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:mysql://localhost:3306/quiz?useUnicode=true&characterEncoding=utf8&useSSL=false
         name: quiz
-        username: quiz
+        login: quiz
         password: quizPass789
         hikari:
             data-source-properties:

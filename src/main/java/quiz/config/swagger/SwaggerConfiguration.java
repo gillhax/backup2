@@ -1,4 +1,4 @@
-package quiz.config.apidoc;
+package quiz.config.swagger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,11 @@ public class SwaggerConfiguration {
       watch.start();
       Contact contact = new Contact(jHipsterProperties.getSwagger().getContactName(), jHipsterProperties.getSwagger().getContactUrl(), jHipsterProperties.getSwagger().getContactEmail());
       ApiInfo apiInfo = new ApiInfo(jHipsterProperties.getSwagger().getTitle(), jHipsterProperties.getSwagger().getDescription(), jHipsterProperties.getSwagger().getVersion(), jHipsterProperties.getSwagger().getTermsOfServiceUrl(), contact, jHipsterProperties.getSwagger().getLicense(), jHipsterProperties.getSwagger().getLicenseUrl());
-      Docket docket = (new Docket(DocumentationType.SWAGGER_2)).apiInfo(apiInfo).forCodeGeneration(true).genericModelSubstitutes(new Class[]{ResponseEntity.class}).select().paths(PathSelectors.regex("/api/.*")).build();
+       Docket docket = (new Docket(DocumentationType.SWAGGER_2))
+           .apiInfo(apiInfo)
+           .forCodeGeneration(true)
+           .useDefaultResponseMessages(false)
+           .genericModelSubstitutes(ResponseEntity.class).select().paths(PathSelectors.regex("/api/.*")).build();
       watch.stop();
       this.log.debug("Started Swagger in {} ms", Long.valueOf(watch.getTotalTimeMillis()));
       return docket;

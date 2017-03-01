@@ -1,11 +1,5 @@
 package quiz;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -19,6 +13,13 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import quiz.config.DefaultProfileUtil;
 import quiz.config.JHipsterProperties;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.List;
 
 @ComponentScan
 @EnableAutoConfiguration(
@@ -45,7 +46,7 @@ public class QuizApp {
    }
 
    public static void main(String[] args) throws UnknownHostException {
-      SpringApplication app = new SpringApplication(new Object[]{QuizApp.class});
+       SpringApplication app = new SpringApplication(QuizApp.class);
       DefaultProfileUtil.addDefaultProfile(app);
       ConfigurableEnvironment env = app.run(args).getEnvironment();
       log.info("\n----------------------------------------------------------\n\tApplication \'{}\' is running! Access URLs:\n\tLocal: \t\thttp://localhost:{}\n\tExternal: \thttp://{}:{}\n----------------------------------------------------------", new Object[]{env.getProperty("spring.application.name"), env.getProperty("server.port"), InetAddress.getLocalHost().getHostAddress(), env.getProperty("server.port")});

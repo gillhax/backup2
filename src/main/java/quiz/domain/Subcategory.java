@@ -1,26 +1,21 @@
 package quiz.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.beans.ConstructorProperties;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import quiz.domain.Category;
-import quiz.domain.Question;
 
 @Entity
+@Getter
+@Setter
 @Table(
    name = "subcategory"
 )
@@ -62,7 +57,7 @@ public class Subcategory implements Serializable {
          return true;
       } else if(o != null && this.getClass() == o.getClass()) {
          Subcategory subcategory = (Subcategory)o;
-         return subcategory.id != null && this.id != null?Objects.equals(this.id, subcategory.id):false;
+          return (subcategory.id != null && this.id != null) && Objects.equals(this.id, subcategory.id);
       } else {
          return false;
       }
@@ -76,40 +71,9 @@ public class Subcategory implements Serializable {
       return "Subcategory{id=" + this.id + ", name=\'" + this.name + "\'" + '}';
    }
 
-   public Long getId() {
-      return this.id;
-   }
-
-   public String getName() {
-      return this.name;
-   }
-
-   public Category getCategory() {
-      return this.category;
-   }
-
-   public List getQuestions() {
-      return this.questions;
-   }
-
-   public void setId(Long id) {
-      this.id = id;
-   }
-
-   public void setName(String name) {
-      this.name = name;
-   }
-
-   public void setCategory(Category category) {
-      this.category = category;
-   }
-
-   public void setQuestions(List questions) {
-      this.questions = questions;
-   }
 
    @ConstructorProperties({"id", "name", "category", "questions"})
-   public Subcategory(Long id, String name, Category category, List questions) {
+   public Subcategory(Long id, String name, Category category, List<Question> questions) {
       this.id = id;
       this.name = name;
       this.category = category;

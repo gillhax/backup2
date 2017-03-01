@@ -1,26 +1,22 @@
 package quiz.domain;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import quiz.domain.MediaContainer;
-import quiz.domain.Subcategory;
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Objects;
 
 @Entity
+@Getter
+@Setter
 @Table(
    name = "question"
 )
@@ -122,7 +118,7 @@ public class Question implements Serializable {
          return true;
       } else if(o != null && this.getClass() == o.getClass()) {
          Question question = (Question)o;
-         return question.id != null && this.id != null?Objects.equals(this.id, question.id):false;
+          return (question.id != null && this.id != null) && Objects.equals(this.id, question.id);
       } else {
          return false;
       }
@@ -136,83 +132,4 @@ public class Question implements Serializable {
       return "Question{id=" + this.id + ", version=\'" + this.version + "\', title=\'" + this.title + "\', answer1=\'" + this.answer1 + "\', answer2=\'" + this.answer2 + "\', answer3=\'" + this.answer3 + "\', answer4=\'" + this.answer4 + "\', rightAnswer=\'" + this.rightAnswer + "\'" + '}';
    }
 
-   public Long getId() {
-      return this.id;
-   }
-
-   public Timestamp getVersion() {
-      return this.version;
-   }
-
-   public String getTitle() {
-      return this.title;
-   }
-
-   public MediaContainer getMedia() {
-      return this.media;
-   }
-
-   public String getAnswer1() {
-      return this.answer1;
-   }
-
-   public String getAnswer2() {
-      return this.answer2;
-   }
-
-   public String getAnswer3() {
-      return this.answer3;
-   }
-
-   public String getAnswer4() {
-      return this.answer4;
-   }
-
-   public Integer getRightAnswer() {
-      return this.rightAnswer;
-   }
-
-   public Subcategory getSubcategory() {
-      return this.subcategory;
-   }
-
-   public void setId(Long id) {
-      this.id = id;
-   }
-
-   public void setVersion(Timestamp version) {
-      this.version = version;
-   }
-
-   public void setTitle(String title) {
-      this.title = title;
-   }
-
-   public void setMedia(MediaContainer media) {
-      this.media = media;
-   }
-
-   public void setAnswer1(String answer1) {
-      this.answer1 = answer1;
-   }
-
-   public void setAnswer2(String answer2) {
-      this.answer2 = answer2;
-   }
-
-   public void setAnswer3(String answer3) {
-      this.answer3 = answer3;
-   }
-
-   public void setAnswer4(String answer4) {
-      this.answer4 = answer4;
-   }
-
-   public void setRightAnswer(Integer rightAnswer) {
-      this.rightAnswer = rightAnswer;
-   }
-
-   public void setSubcategory(Subcategory subcategory) {
-      this.subcategory = subcategory;
-   }
 }

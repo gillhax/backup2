@@ -1,11 +1,8 @@
-package quiz.config.apidoc;
+package quiz.config.swagger;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
@@ -20,6 +17,10 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Order(-2147482648)

@@ -1,9 +1,5 @@
 package quiz.service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -19,6 +15,11 @@ import quiz.repository.PlayerRepository;
 import quiz.service.dto.PlayerDtoIn;
 import quiz.service.dto.PlayerDtoOut;
 import quiz.system.error.ApiAssert;
+
+import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class PlayerService {
@@ -88,8 +89,8 @@ public class PlayerService {
 
    public Map getPlayersTop(Long userId) {
       PageRequest pageable = new PageRequest(0, 100);
-      List players = this.playerRepository.findOrderByScore(pageable);
-      List playersDto = this.playerConverter.toDTOs(players);
+       List<Player> players = this.playerRepository.findOrderByScore(pageable);
+       List<PlayerDtoOut> playersDto = this.playerConverter.toDTOs(players);
       Long playerPosition = null;
       if(userId != null) {
          playerPosition = this.playerRepository.findPlayerPosition(userId);
