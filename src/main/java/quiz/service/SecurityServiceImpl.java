@@ -39,7 +39,7 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public LoginVMOut login(LoginVM loginVM) {
-        Optional<User> user = userRepository.findOneByLogin(loginVM.getLogin());
+        Optional<User> user = userRepository.findOneByLogin(loginVM.getUsername());
         if (!user.isPresent() ||
             !bCryptPasswordEncoder.matches(loginVM.getPassword(), user.get().getPassword())) {
             throw new SecurityUserException("security.login.incorrect");

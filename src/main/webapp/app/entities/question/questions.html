@@ -1,98 +1,148 @@
-<div>
-    <h2 data-translate="quizApp.question.home.title">Вопросы</h2>
+<div><h2 data-translate="quizApp.question.home.title">Вопросы‹</h2>
     <jhi-alert></jhi-alert>
-    <br>
-    <div class="container-fluid">
-        <form name="form" role="form"  novalidate show-validation acceptcharset="UTF-8"
-              enctype="multipart/form-data" action="/api/v1/parser/upload" method="post">
-            <div class="form-group">
-                <label class="control-label" for="files">Загрузить вопросы через файл(выбрать Excel файл и картинки):</label>
-                <input class="form-control" name="files" id="files" type="file"  multiple>
-            </div>
-            <button type="submit" class="btn btn-primary">Загрузить</button>
-        </form>
-    </div>
-    <br>
-    <br>
+    <jhi-alert-error></jhi-alert-error>
+    <style type="text/css">.btn-upload {
+        position: relative;
+        overflow: hidden;
+
+    }
+
+    .btn-upload input {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 0;
+        opacity: 0;
+        filter: alpha(opacity=0);
+        transform: translate(-300px, 0) scale(4);
+        -webkit-transform: translate(-300px, 0) scale(4);
+        -ms-transform: translate(-300px, 0) scale(4);
+        -o-transform: translate(-300px, 0) scale(4);
+        font-size: 23px;
+        direction: ltr;
+        cursor: pointer;
+
+    }
+
+    * html .btn-upload {
+        line-height: 24px;
+        margin: 1px -3px 0 0;
+
+    }
+
+    * + html .btn-upload {
+        padding: 2px 15px;
+        margin: 1px 0 0 0;
+
+    }
+
+    .show-image div {
+        visibility: hidden;
+        position: absolute;
+        background: #fff;
+        box-shadow: -2px 2px 10px -1px #111;
+        border-radius: 2px;
+        z-index: 5;
+
+    }
+
+    .show-image a {
+        color: black;
+
+    }
+
+    .show-image span {
+        color: black;
+
+    }
+
+    .show-image:link div {
+        color: inherit;
+
+    }
+
+    .show-image:visited {
+        color: inherit;
+
+    }
+
+    .show-image:active div {
+        color: inherit;
+
+    }
+
+    .show-image:hover div {
+        color: inherit;
+        visibility: visible;
+
+    }</style>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-xs-4 no-padding-left">
-                <button class="btn btn-primary" ui-sref="question.new" >
-                    <span class="glyphicon glyphicon-plus"></span>
-                    <span  data-translate="quizApp.question.home.createLabel">
-                        Создать новый вопрос
-                    </span>
+            <div class="no-padding-left">
+                <button class="btn btn-primary" ui-sref="question.new"><span class="glyphicon glyphicon-plus"></span>
+                    <span
+                        data-translate="quizApp.question.home.createLabel">Создать вопрос</span>
                 </button>
+                <div style="float: right">
+                    <upload-button class="btn btn-primary btn-upload" url="/api/v1/parser/upload" data="files"
+                                   param="files" multiple="true">Загрузить список вопросов
+                    </upload-button>
+                </div>
             </div>
         </div>
     </div>
-    <br/>
+    <br>
+
     <div class="table-responsive">
+
         <table class="jh-table table table-striped">
             <thead>
-                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-                    <th jh-sort-by="id"><span data-translate="global.field.id">ID</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="title"><span data-translate="quizApp.question.title">Вопрос</span> <span
+            <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+                <th jh-sort-by="id"><span data-translate="global.field.id">ID</span>
+                    <span class="glyphicon glyphicon-sort"></span></th>
+                <th>
+                    <div class="glyphicon glyphicon-picture"></div>
+                </th>
+                <th jh-sort-by="title"><span data-translate="quizApp.question.title">Вопрос</span>
+                    <span
                         class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="media"><span data-translate="quizApp.question.media">Данные</span> <span
-                        class="glyphicon glyphicon-sort"></span></th>
-                    <!--<th jh-sort-by="answer1"><span data-translate="quizApp.question.answer1">Ответ 1</span> <span-->
-                        <!--class="glyphicon glyphicon-sort"></span></th>-->
-                    <!--<th jh-sort-by="answer2"><span data-translate="quizApp.question.answer2">Ответ 2</span> <span-->
-                        <!--class="glyphicon glyphicon-sort"></span></th>-->
-                    <!--<th jh-sort-by="answer3"><span data-translate="quizApp.question.answer3">Ответ 3</span> <span-->
-                        <!--class="glyphicon glyphicon-sort"></span></th>-->
-                    <!--<th jh-sort-by="answer4"><span data-translate="quizApp.question.answer4">Ответ 4</span> <span-->
-                        <!--class="glyphicon glyphicon-sort"></span></th>-->
-                    <!--<th jh-sort-by="rightAnswer"><span-->
-                        <!--data-translate="quizApp.question.rightAnswer">Правильный ответ</span> <span-->
-                        <!--class="glyphicon glyphicon-sort"></span></th>-->
-                    <th jh-sort-by="category.name"><span data-translate="quizApp.question.category">Категория</span>
-                        <span class="glyphicon glyphicon-sort"></span></th>
-                    <th></th>
-                </tr>
+                <th jh-sort-by="subcategory.name"><span data-translate="quizApp.question.category">Катеогогрия</span>
+                    <span class="glyphicon glyphicon-sort"></span></th>
+                <th></th>
+            </tr>
             </thead>
             <tbody>
-                <tr style="width: 100% " ng-repeat="question in vm.questions track by question.id">
-                    <td><a ui-sref="question-detail({id:question.id})">{{question.id}}</a></td>
-                    <td>{{question.title}}</td>
-                    <td><img ng-if="question.media" ng-src="{{question.media.media}}" height="100" width="100"/></td>
-                    <!--<td>{{question.answer1}}</td>-->
-                    <!--<td>{{question.answer2}}</td>-->
-                    <!--<td>{{question.answer3}}</td>-->
-                    <!--<td>{{question.answer4}}</td>-->
-                    <!--<td>{{question.rightAnswer}}</td>-->
-                    <td>
-                        <a ui-sref="category-detail({id:question.category.id})">{{question.subcategory.name}}</a>
-                    </td>
-                    <td class="text-right">
-                        <div class="btn-group flex-btn-group-container">
-                            <button type="submit"
-                                    ui-sref="question-detail({id:question.id})"
-                                    class="btn btn-info btn-sm">
-                                <span class="glyphicon glyphicon-eye-open"></span>
-                                <span class="hidden-xs hidden-sm" data-translate="entity.action.view"></span>
-                            </button>
-                            <button type="submit"
-                                    ui-sref="question.edit({id:question.id})"
-                                    class="btn btn-primary btn-sm">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                                <span class="hidden-xs hidden-sm" data-translate="entity.action.edit"></span>
-                            </button>
-                            <button type="submit"
-                                    ui-sref="question.delete({id:question.id})"
-                                    class="btn btn-danger btn-sm">
-                                <span class="glyphicon glyphicon-remove-circle"></span>
-                                <span class="hidden-xs hidden-sm" data-translate="entity.action.delete"></span>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
+            <tr style="width: 100%" ng-repeat="question in vm.questions track by question.id">
+                <td style="min-width: 55px"><a ui-sref="question-detail({id:question.id})">{{question.id}}</a></td>
+                <td><a ng-if="question.media.media" class="show-image"><span class="glyphicon glyphicon-picture"></span>
+                    <div><img height="400" width="680" src="{{question.media.media}}"></div>
+                </a></td>
+                <td style="width: 60%">{{question.title}}</td>
+
+                <td><a>{{question.subcategory.name}}</a></td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit" ui-sref="question-detail({id:question.id})" class="btn btn-info btn-sm">
+                            <span class="glyphicon glyphicon-eye-open"></span> <span class="hidden-xs hidden-sm"
+                                                                                     data-translate="entity.action.view"></span>
+                        </button>
+                        <button type="submit" ui-sref="question.edit({id:question.id})" class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-pencil"></span> <span class="hidden-xs hidden-sm"
+                                                                                   data-translate="entity.action.edit"></span>
+                        </button>
+                        <button type="submit" ui-sref="question.delete({id:question.id})" class="btn btn-danger btn-sm">
+                            <span class="glyphicon glyphicon-remove-circle"></span>
+                            <span class="hidden-xs hidden-sm" data-translate="entity.action.delete"></span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>
     <div class="text-center">
         <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
-        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
+        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage"
+                        ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
     </div>
 </div>

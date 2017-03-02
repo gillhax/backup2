@@ -1,0 +1,382 @@
+, t.put("app/entities/question/question-detail.html", '
+<div><h2><span data-translate="quizApp.question.detail.title">Ð’Ð¾Ð¿Ñ€Ð¾Ñ</span> {{vm.question.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span data-translate="quizApp.question.title">Title</span></dt>
+        <dd><span>{{vm.question.title}}</span></dd>
+        <dt ng-if="vm.question.media.media"><span data-translate="quizApp.question.media">ÐšÐ°Ñ€Ñ‚Ð¸Ð½ÐºÐ°</span></dt>
+        <dd ng-if="vm.question.media.media"><img src="{{vm.question.media.media}}" style="max-width:100%"></dd>
+        <dt style="{{(vm.question.rightAnswer === 1) ? \'color:green;\' : \'color:darkred\'}}"><span
+            data-translate="quizApp.question.answer1">ÐžÑ‚Ð²ÐµÑ‚ 1</span></dt>
+        <dd style="{{(vm.question.rightAnswer === 1) ? \'color:green\' :  \'color:darkred\'}}"><span>{{vm.question.answer1}}</span>
+        </dd>
+        <dt style="{{(vm.question.rightAnswer === 2) ? \'color:green;\' : \'color:darkred\'}}"><span
+            data-translate="quizApp.question.answer2">ÐžÑ‚Ð²ÐµÑ‚ 2</span></dt>
+        <dd style="{{(vm.question.rightAnswer === 2) ? \'color:green;\' : \'color:darkred\'}}"><span>{{vm.question.answer2}}</span>
+        </dd>
+        <dt style="{{(vm.question.rightAnswer === 3) ? \'color:green;\' : \'color:darkred\'}}"><span
+            data-translate="quizApp.question.answer3">ÐžÑ‚Ð²ÐµÑ‚ 3</span></dt>
+        <dd style="{{(vm.question.rightAnswer === 3) ? \'color:green;\' : \'color:darkred\'}}"><span>{{vm.question.answer3}}</span>
+        </dd>
+        <dt style="{{(vm.question.rightAnswer === 4) ? \'color:green;\' : \'color:darkred\'}}"><span
+            data-translate="quizApp.question.answer4">ÐžÑ‚Ð²ÐµÑ‚ 4</span></dt>
+        <dd style="{{(vm.question.rightAnswer === 4) ? \'color:green;\' : \'color:darkred\'}}"><span>{{vm.question.answer4}}</span>
+        </dd>
+        <dt><span data-translate="quizApp.question.category">Ð’ÐµÑ‚Ð²ÑŒ</span></dt>
+        <dd><a ui-sref="category-detail({id:vm.question.category.id})">{{vm.question.subcategory.name}}</a></dd>
+    </dl>
+    <button type="submit" ui-sref="{{ vm.previousState }}" class="btn btn-info"><span
+        class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
+    </button>
+    <button type="button" ui-sref="question-detail.edit({id:vm.question.id})" class="btn btn-primary"><span
+        class="glyphicon glyphicon-pencil"></span> <span class="hidden-xs hidden-sm"
+                                                         data-translate="entity.action.edit">Edit</span></button>
+</div>'), t.put("app/entities/question/question-dialog.html", '
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myQuestionLabel" data-translate="quizApp.question.home.createOrEditLabel">Create or
+            edit a Question</h4></div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" ng-show="vm.question.id"><label for="id"
+                                                                data-translate="global.field.id">ID</label><input
+            type="text" class="form-control" id="id" name="id" ng-model="vm.question.id" readonly="readonly"></div>
+        <div class="form-group"><label class="control-label" data-translate="quizApp.question.title" for="field_title">Ð’Ð¾Ð¿Ñ€Ð¾Ñ</label><input
+            type="text" class="form-control" name="title" id="field_title" ng-model="vm.question.title" required
+            ng-minlength="1" ng-maxlength="512">
+            <div ng-show="editForm.title.$invalid"><p class="help-block" ng-show="editForm.title.$error.required"
+                                                      data-translate="entity.validation.required">This field is
+                required.</p>
+                <p class="help-block" ng-show="editForm.title.$error.minlength"
+                   data-translate="entity.validation.minlength" translate-value-min="1">This field is required to be at
+                    least 1 characters.</p>
+                <p class="help-block" ng-show="editForm.title.$error.maxlength"
+                   data-translate="entity.validation.maxlength" translate-value-max="512">This field cannot be longer
+                    than 512 characters.</p></div>
+        </div><!--<div class="form-group">-->
+        <!--<label class="control-label" data-translate="quizApp.question.media" for="field_media">Ð”Ð°Ð½Ð½Ñ‹Ðµ</label>-->
+        <!--<input type="text" class="form-control" name="media" id="field_media"--><!--ng-model="vm.question.media"-->
+        <!--ng-minlength="0" ng-maxlength="512" />--><!--<div ng-show="editForm.media.$invalid">-->
+        <!--<p class="help-block"-->
+        <!--ng-show="editForm.media.$error.minlength" data-translate="entity.validation.minlength" translate-value-min="0">-->
+        <!--This field is required to be at least 0 characters.--><!--</p>--><!--<p class="help-block"-->
+        <!--ng-show="editForm.media.$error.maxlength" data-translate="entity.validation.maxlength" translate-value-max="512">-->
+        <!--This field cannot be longer than 512 characters.--><!--</p>--><!--</div>--><!--</div>-->
+        <div class="form-group"><label class="control-label"><input type="radio" ng-model="vm.question.rightAnswer"
+                                                                    value="1"> ÐžÑ‚Ð²ÐµÑ‚ 1</label><input type="text"
+                                                                                                          class="form-control"
+                                                                                                          name="answer1"
+                                                                                                          id="field_answer1"
+                                                                                                          ng-model="vm.question.answer1"
+                                                                                                          required
+                                                                                                          ng-minlength="1"
+                                                                                                          ng-maxlength="64">
+            <div ng-show="editForm.answer1.$invalid"><p class="help-block" ng-show="editForm.answer1.$error.required"
+                                                        data-translate="entity.validation.required">This field is
+                required.</p>
+                <p class="help-block" ng-show="editForm.answer1.$error.minlength"
+                   data-translate="entity.validation.minlength" translate-value-min="1">This field is required to be at
+                    least 1 characters.</p>
+                <p class="help-block" ng-show="editForm.answer1.$error.maxlength"
+                   data-translate="entity.validation.maxlength" translate-value-max="64">This field cannot be longer
+                    than 64 characters.</p></div>
+        </div>
+        <div class="form-group"><label class="control-label"><input type="radio" ng-model="vm.question.rightAnswer"
+                                                                    value="2"> ÐžÑ‚Ð²ÐµÑ‚ 2</label><input type="text"
+                                                                                                          class="form-control"
+                                                                                                          name="answer2"
+                                                                                                          id="field_answer2"
+                                                                                                          ng-model="vm.question.answer2"
+                                                                                                          required
+                                                                                                          ng-minlength="1"
+                                                                                                          ng-maxlength="64">
+            <div ng-show="editForm.answer2.$invalid"><p class="help-block" ng-show="editForm.answer2.$error.required"
+                                                        data-translate="entity.validation.required">This field is
+                required.</p>
+                <p class="help-block" ng-show="editForm.answer2.$error.minlength"
+                   data-translate="entity.validation.minlength" translate-value-min="1">This field is required to be at
+                    least 1 characters.</p>
+                <p class="help-block" ng-show="editForm.answer2.$error.maxlength"
+                   data-translate="entity.validation.maxlength" translate-value-max="64">This field cannot be longer
+                    than 64 characters.</p></div>
+        </div>
+        <div class="form-group"><label class="control-label"><input type="radio" ng-model="vm.question.rightAnswer"
+                                                                    value="3"> ÐžÑ‚Ð²ÐµÑ‚ 3</label><input type="text"
+                                                                                                          class="form-control"
+                                                                                                          name="answer3"
+                                                                                                          id="field_answer3"
+                                                                                                          ng-model="vm.question.answer3"
+                                                                                                          required
+                                                                                                          ng-minlength="1"
+                                                                                                          ng-maxlength="64">
+            <div ng-show="editForm.answer3.$invalid"><p class="help-block" ng-show="editForm.answer3.$error.required"
+                                                        data-translate="entity.validation.required">This field is
+                required.</p>
+                <p class="help-block" ng-show="editForm.answer3.$error.minlength"
+                   data-translate="entity.validation.minlength" translate-value-min="1">This field is required to be at
+                    least 1 characters.</p>
+                <p class="help-block" ng-show="editForm.answer3.$error.maxlength"
+                   data-translate="entity.validation.maxlength" translate-value-max="64">This field cannot be longer
+                    than 64 characters.</p></div>
+        </div>
+        <div class="form-group"><label class="control-label"><input type="radio" ng-model="vm.question.rightAnswer"
+                                                                    value="4"> ÐžÑ‚Ð²ÐµÑ‚ 4</label><input type="text"
+                                                                                                          class="form-control"
+                                                                                                          name="answer4"
+                                                                                                          id="field_answer4"
+                                                                                                          ng-model="vm.question.answer4"
+                                                                                                          required
+                                                                                                          ng-minlength="1"
+                                                                                                          ng-maxlength="64">
+            <div ng-show="editForm.answer4.$invalid"><p class="help-block" ng-show="editForm.answer4.$error.required"
+                                                        data-translate="entity.validation.required">This field is
+                required.</p>
+                <p class="help-block" ng-show="editForm.answer4.$error.minlength"
+                   data-translate="entity.validation.minlength" translate-value-min="1">This field is required to be at
+                    least 1 characters.</p>
+                <p class="help-block" ng-show="editForm.answer4.$error.maxlength"
+                   data-translate="entity.validation.maxlength" translate-value-max="64">This field cannot be longer
+                    than 64 characters.</p></div>
+        </div><!--<div class="form-group">-->
+        <!--<label class="control-label" data-translate="quizApp.question.rightAnswer" for="field_rightAnswer">ÐŸÑ€Ð°Ð²Ð¸Ð»ÑŒÐ½Ñ‹Ð¹-->
+        <!--Ð¾Ñ‚Ð²ÐµÑ‚</label>-->
+        <!--<input type="number" class="form-control" name="rightAnswer" id="field_rightAnswer"-->
+        <!--ng-model="vm.question.rightAnswer"--><!--required/>--><!--<div ng-show="editForm.rightAnswer.$invalid">-->
+        <!--<p class="help-block"-->
+        <!--ng-show="editForm.rightAnswer.$error.required" data-translate="entity.validation.required">-->
+        <!--This field is required.--><!--</p>--><!--<p class="help-block"-->
+        <!--ng-show="editForm.rightAnswer.$error.number" data-translate="entity.validation.number">-->
+        <!--This field should be a number.--><!--</p>--><!--</div>--><!--</div>-->
+        <div class="form-group"><label data-translate="quizApp.question.category" for="field_category">ÐšÐ°Ñ‚ÐµÐ³Ð¾Ñ€Ð¸Ñ</label><select
+            class="form-control" id="field_category" name="category" ng-model="vm.cat"
+            ng-options="category as category.name for category in vm.categories track by category.id" required>
+            <option value=""></option>
+        </select></div>
+        <div ng-show="editForm.category.$invalid"><p class="help-block" ng-show="editForm.category.$error.required"
+                                                     data-translate="entity.validation.required">This field is
+            required.</p></div>
+        <div class="form-group"><label data-translate="quizApp.question.category"
+                                       for="field_subcategory">Ð’ÐµÑ‚Ð²ÑŒ</label><select class="form-control"
+                                                                                         id="field_subcategory"
+                                                                                         name="subcategory"
+                                                                                         ng-options="subcategory as subcategory.name for subcategory in vm.cat.subcategories track by subcategory.id"
+                                                                                         required>
+            <option value=""></option>
+        </select></div>
+        <div ng-show="editForm.subcategory.$invalid"><p class="help-block"
+                                                        ng-show="editForm.subcategory.$error.required"
+                                                        data-translate="entity.validation.required">This field is
+            required.</p></div>
+    </div>
+</form>'), t.put("app/entities/question/questions.html", '
+<div><h2 data-translate="quizApp.question.home.title">Ð’Ð¾Ð¿Ñ€Ð¾ÑÑ‹</h2>
+    <jhi-alert></jhi-alert>
+    <jhi-alert-error></jhi-alert-error>
+    <style type="text/css">.btn-upload {
+        \n position: relative;
+        \n overflow: hidden;
+        \n
+    }
+
+    \n\n .btn-upload input {
+        \n position: absolute;
+        \n top: 0;
+        \n right: 0;
+        \n margin: 0;
+        \n opacity: 0;
+        \n filter: alpha(opacity = 0);
+        \n transform: translate(-300px, 0) scale(4);
+        \n -webkit-transform: translate(-300px, 0) scale(4);
+        \n -ms-transform: translate(-300px, 0) scale(4);
+        \n -o-transform: translate(-300px, 0) scale(4);
+        \n font-size: 23px;
+        \n direction: ltr;
+        \n cursor: pointer;
+        \n
+    }
+
+    \n\n * html .btn-upload {
+        \n line-height: 24px;
+        \n margin: 1px -3px 0 0;
+        \n
+    }
+
+    \n\n * + html .btn-upload {
+        \n padding: 2px 15px;
+        \n margin: 1px 0 0 0;
+        \n
+    }
+
+    \n\n .show-image div {
+        \n visibility: hidden;
+        \n position: absolute;
+        \n background: #fff;
+        \n box-shadow: -2px 2px 10px -1px #111;
+        \n border-radius: 2px;
+        \n z-index: 5;
+        \n
+    }
+
+    \n\n .show-image a {
+        \n color: black;
+        \n
+    }
+
+    \n\n .show-image span {
+        \n color: black;
+        \n
+    }
+
+    \n\n .show-image:link div {
+        \n color: inherit;
+        \n
+    }
+
+    \n\n .show-image:visited {
+        \n color: inherit;
+        \n
+    }
+
+    \n\n .show-image:active div {
+        \n color: inherit;
+        \n
+    }
+
+    \n\n .show-image:hover div {
+        \n color: inherit;
+        \n visibility: visible;
+        \n
+    }</style>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="no-padding-left">
+                <button class="btn btn-primary" ui-sref="question.new"><span class="glyphicon glyphicon-plus"></span>
+                    <span
+                        data-translate="quizApp.question.home.createLabel">Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÑŒ Ð½Ð¾Ð²Ñ‹Ð¹ Ð²Ð¾Ð¿Ñ€Ð¾Ñ</span>
+                </button>
+                <div style="float: right">
+                    <upload-button class="btn btn-primary btn-upload" url="/api/v1/parser/upload" data="files"
+                                   param="files" multiple="true">Ð—Ð°Ð³Ñ€ÑƒÐ·Ð¸Ñ‚ÑŒ ÑÐ¿Ð¸ÑÐ¾Ðº Ð²Ð¾Ð¿Ñ€Ð¾ÑÐ¾Ð²
+                    </upload-button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+            <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+                <th jh-sort-by="id"><span data-translate="global.field.id">ID</span> <span
+                    class="glyphicon glyphicon-sort"></span></th>
+                <th>
+                    <div class="glyphicon glyphicon-picture"></div>
+                </th>
+                <th jh-sort-by="title"><span data-translate="quizApp.question.title">Ð’Ð¾Ð¿Ñ€Ð¾Ñ</span> <span
+                    class="glyphicon glyphicon-sort"></span></th>
+                <!--<th jh-sort-by="answer1"><span data-translate="quizApp.question.answer1">ÐžÑ‚Ð²ÐµÑ‚ 1</span> <span-->
+                <!--class="glyphicon glyphicon-sort"></span></th>-->
+                <!--<th jh-sort-by="answer2"><span data-translate="quizApp.question.answer2">ÐžÑ‚Ð²ÐµÑ‚ 2</span> <span-->
+                <!--class="glyphicon glyphicon-sort"></span></th>-->
+                <!--<th jh-sort-by="answer3"><span data-translate="quizApp.question.answer3">ÐžÑ‚Ð²ÐµÑ‚ 3</span> <span-->
+                <!--class="glyphicon glyphicon-sort"></span></th>-->
+                <!--<th jh-sort-by="answer4"><span data-translate="quizApp.question.answer4">ÐžÑ‚Ð²ÐµÑ‚ 4</span> <span-->
+                <!--class="glyphicon glyphicon-sort"></span></th>--><!--<th jh-sort-by="rightAnswer"><span-->
+                <!--data-translate="quizApp.question.rightAnswer">ÐŸÑ€Ð°Ð²Ð¸Ð»ÑŒÐ½Ñ‹Ð¹ Ð¾Ñ‚Ð²ÐµÑ‚</span> <span-->
+                <!--class="glyphicon glyphicon-sort"></span></th>-->
+                <th jh-sort-by="subcategory.name"><span data-translate="quizApp.question.category">Ð’ÐµÑ‚Ð²ÑŒ</span>
+                    <span class="glyphicon glyphicon-sort"></span></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr style="width: 100%" ng-repeat="question in vm.questions track by question.id">
+                <td style="min-width: 55px"><a ui-sref="question-detail({id:question.id})">{{question.id}}</a></td>
+                <td><a ng-if="question.media.media" class="show-image"><span class="glyphicon glyphicon-picture"></span>
+                    <div><img height="400" width="680" src="{{question.media.media}}"></div>
+                </a></td>
+                <td style="width: 60%">{{question.title}}</td><!--<td>{{question.answer1}}</td>-->
+                <!--<td>{{question.answer2}}</td>--><!--<td>{{question.answer3}}</td>-->
+                <!--<td>{{question.answer4}}</td>--><!--<td>{{question.rightAnswer}}</td>-->
+                <td><a>{{question.subcategory.name}}</a></td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit" ui-sref="question-detail({id:question.id})" class="btn btn-info btn-sm">
+                            <span class="glyphicon glyphicon-eye-open"></span> <span class="hidden-xs hidden-sm"
+                                                                                     data-translate="entity.action.view"></span>
+                        </button>
+                        <button type="submit" ui-sref="question.edit({id:question.id})" class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-pencil"></span> <span class="hidden-xs hidden-sm"
+                                                                                   data-translate="entity.action.edit"></span>
+                        </button>
+                        <button type="submit" ui-sref="question.delete({id:question.id})" class="btn btn-danger btn-sm">
+                            <span class="glyphicon glyphicon-remove-circle"></span> <span class="hidden-xs hidden-sm"
+                                                                                          data-translate="entity.action.delete"></span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center">
+        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage"
+                        ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
+    </div>
+</div>'), t.put("app/entities/subcategory/subcategories.html", '
+<div><h2 data-translate="quizApp.subcategory.home.title">Subcategories</h2>
+    <jhi-alert></jhi-alert>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="subcategory.new"><span class="glyphicon glyphicon-plus"></span>
+                    <span data-translate="quizApp.subcategory.home.createLabel">Create new Subcategory</span></button>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+            <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+                <th jh-sort-by="id"><span data-translate="global.field.id">ID</span> <span
+                    class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="name"><span data-translate="quizApp.subcategory.name">Name</span> <span
+                    class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="category.name"><span data-translate="quizApp.subcategory.category">Category</span> <span
+                    class="glyphicon glyphicon-sort"></span></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="subcategory in vm.subcategories track by subcategory.id">
+                <td><a ui-sref="subcategory-detail({id:subcategory.id})">{{subcategory.id}}</a></td>
+                <td>{{subcategory.name}}</td>
+                <td><a ui-sref="category-detail({id:subcategory.category.id})">{{subcategory.category.name}}</a></td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit" ui-sref="subcategory-detail({id:subcategory.id})"
+                                class="btn btn-info btn-sm"><span class="glyphicon glyphicon-eye-open"></span> <span
+                            class="hidden-xs hidden-sm" data-translate="entity.action.view"></span></button>
+                        <button type="submit" ui-sref="subcategory.edit({id:subcategory.id})"
+                                class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-pencil"></span> <span
+                            class="hidden-xs hidden-sm" data-translate="entity.action.edit"></span></button>
+                        <button type="submit" ui-sref="subcategory.delete({id:subcategory.id})"
+                                class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-remove-circle"></span>
+                            <span class="hidden-xs hidden-sm" data-translate="entity.action.delete"></span></button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center">
+        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage"
+                        ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
+    </div>
+</div>')

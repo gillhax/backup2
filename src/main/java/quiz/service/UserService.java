@@ -29,6 +29,8 @@ import javax.inject.Inject;
 import java.time.ZonedDateTime;
 import java.util.*;
 
+import static quiz.security.SecurityUtils.getCurrentUserId;
+
 @Service
 @Transactional
 public class UserService {
@@ -213,10 +215,10 @@ public class UserService {
       readOnly = true
    )
    public User getUserWithAuthorities() {
-      Optional optionalUser = this.userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
+       User optionalUser = this.userRepository.findOne(getCurrentUserId());
       User user = null;
-      if(optionalUser.isPresent()) {
-         user = (User)optionalUser.get();
+       if (optionalUser != null) {
+           user = (User) optionalUser;
          user.getAuthorities().size();
       }
 

@@ -34,6 +34,7 @@ public class Question implements Serializable {
       name = "version"
    )
    private Timestamp version;
+
    @NotNull
    @Size(
       min = 1,
@@ -45,7 +46,8 @@ public class Question implements Serializable {
       nullable = false
    )
    private String title;
-   @ManyToOne(
+
+    @ManyToOne(
       targetEntity = MediaContainer.class
    )
    @JoinColumn(
@@ -108,9 +110,7 @@ public class Question implements Serializable {
       targetEntity = Subcategory.class
    )
    @NotNull
-   @JoinColumn(
-      name = "subcategory_id"
-   )
+   @JoinColumn(name = "subcategory_id")
    private Subcategory subcategory;
 
    public boolean equals(Object o) {

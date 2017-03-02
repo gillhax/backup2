@@ -57,23 +57,23 @@
                     resetPreviousState();
                     $state.go(previousState.name, previousState.params);
                 }
-
-                if ($rootScope.toState.data.authorities && $rootScope.toState.data.authorities.length > 0 && !Principal.hasAnyAuthority($rootScope.toState.data.authorities)) {
-                    if (isAuthenticated) {
-                        // user is signed in but not authorized for desired state
-                        $state.go('accessdenied');
-                    }
-                    else {
-                        // user is not authenticated. stow the state they wanted before you
-                        // send them to the login service, so you can return them when you're done
-                        storePreviousState($rootScope.toState.name, $rootScope.toStateParams);
-
-                        // now, send them to the signin state so they can log in
-                        $state.go('accessdenied').then(function() {
-                            LoginService.open();
-                        });
-                    }
-                }
+                //TODO:FIX THIS(in principal.service method hasAnyAuthority always false)
+                // if ($rootScope.toState.data.authorities && $rootScope.toState.data.authorities.length > 0 && !Principal.hasAnyAuthority($rootScope.toState.data.authorities)) {
+                //     if (isAuthenticated) {
+                //         // user is signed in but not authorized for desired state
+                //         $state.go('accessdenied');
+                //     }
+                //     else {
+                //         // user is not authenticated. stow the state they wanted before you
+                //         // send them to the login service, so you can return them when you're done
+                //         storePreviousState($rootScope.toState.name, $rootScope.toStateParams);
+                //
+                //         // now, send them to the signin state so they can log in
+                //         $state.go('accessdenied').then(function() {
+                //             LoginService.open();
+                //         });
+                //     }
+                // }
             }
         }
 

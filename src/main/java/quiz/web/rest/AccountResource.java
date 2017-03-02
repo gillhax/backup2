@@ -1,12 +1,6 @@
 package quiz.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,11 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import quiz.domain.User;
 import quiz.repository.UserRepository;
 import quiz.security.SecurityUtils;
@@ -31,6 +21,11 @@ import quiz.web.rest.vm.KeyAndPasswordVM;
 import quiz.web.rest.vm.ManagedCreateUserVM;
 import quiz.web.rest.vm.ManagedUserVM;
 import springfox.documentation.annotations.ApiIgnore;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.Optional;
 
 @ApiIgnore
 @RestController
@@ -67,10 +62,10 @@ public class AccountResource {
       return request.getRemoteUser();
    }
 
-   @GetMapping({"/account"})
-   @Timed
+    @GetMapping({"/account"})
+    @Timed
    public ResponseEntity getAccount() {
-      return (ResponseEntity)Optional.ofNullable(this.userService.getUserWithAuthorities()).map((user) -> {
+        return Optional.ofNullable(userService.getUserWithAuthorities()).map((user) -> {
          return new ResponseEntity(new UserDTO(user), HttpStatus.OK);
       }).orElse(new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR));
    }

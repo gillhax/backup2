@@ -74,7 +74,7 @@ public class PlayerController {
       method = {RequestMethod.GET}
    )
    @ApiOperation(
-      value = "Get top 50 players",
+       value = "Get top 100 players",
       response = PlayerDtoOut.class
    )
    public ResponseDto getPlayersTop() {

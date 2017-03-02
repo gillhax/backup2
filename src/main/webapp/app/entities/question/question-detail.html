@@ -1,55 +1,93 @@
+<!--<div>-->
+<!--<h2><span data-translate="quizApp.question.detail.title">Вопрос</span> {{vm.question.id}}</h2>-->
+<!--<hr>-->
+<!--<jhi-alert-error></jhi-alert-error>-->
+<!--<dl class="dl-horizontal jh-entity-details">-->
+<!--<dt><span data-translate="quizApp.question.title">Title</span></dt>-->
+<!--<dd>-->
+<!--<span>{{vm.question.title}}</span>-->
+<!--</dd>-->
+<!--<dt><span data-translate="quizApp.question.mediaType">Media Type</span></dt>-->
+<!--<dd>-->
+<!--<span>{{vm.question.mediaType}}</span>-->
+<!--</dd>-->
+<!--<dt><span data-translate="quizApp.question.media">Media</span></dt>-->
+<!--<dd>-->
+<!--<span>{{vm.question.media}}</span>-->
+<!--</dd>-->
+<!--<dt><span data-translate="quizApp.question.answer1">Answer 1</span></dt>-->
+<!--<dd>-->
+<!--<span>{{vm.question.answer1}}</span>-->
+<!--</dd>-->
+<!--<dt><span data-translate="quizApp.question.answer2">Answer 2</span></dt>-->
+<!--<dd>-->
+<!--<span>{{vm.question.answer2}}</span>-->
+<!--</dd>-->
+<!--<dt><span data-translate="quizApp.question.answer3">Answer 3</span></dt>-->
+<!--<dd>-->
+<!--<span>{{vm.question.answer3}}</span>-->
+<!--</dd>-->
+<!--<dt><span data-translate="quizApp.question.answer4">Answer 4</span></dt>-->
+<!--<dd>-->
+<!--<span>{{vm.question.answer4}}</span>-->
+<!--</dd>-->
+<!--<dt><span data-translate="quizApp.question.rightAnswer">Right Answer</span></dt>-->
+<!--<dd>-->
+<!--<span>{{vm.question.rightAnswer}}</span>-->
+<!--</dd>-->
+<!--<dt><span data-translate="quizApp.question.category">Category</span></dt>-->
+<!--<dd>-->
+<!--<a ui-sref="category-detail({id:vm.question.category.id})">{{vm.question.category.name}}</a>-->
+<!--</dd>-->
+<!--</dl>-->
 
-<div>
-    <h2><span data-translate="quizApp.question.detail.title">Вопрос</span> {{vm.question.id}}</h2>
+<!--<button type="submit"-->
+<!--ui-sref="{{ vm.previousState }}"-->
+<!--class="btn btn-info">-->
+<!--<span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>-->
+<!--</button>-->
+
+<!--<button type="button" ui-sref="question-detail.edit({id:vm.question.id})" class="btn btn-primary">-->
+<!--<span class="glyphicon glyphicon-pencil"></span>-->
+<!--<span class="hidden-xs hidden-sm" data-translate="entity.action.edit"> Edit</span>-->
+<!--</button>-->
+<!--</div>-->
+
+<div><h2><span data-translate="quizApp.question.detail.title">Вопрос</span> {{vm.question.id}}</h2>
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="dl-horizontal jh-entity-details">
         <dt><span data-translate="quizApp.question.title">Title</span></dt>
-        <dd>
-            <span>{{vm.question.title}}</span>
-        </dd>
-        <dt><span data-translate="quizApp.question.mediaType">Media Type</span></dt>
-        <dd>
-            <span>{{vm.question.mediaType}}</span>
-        </dd>
-        <dt><span data-translate="quizApp.question.media">Media</span></dt>
-        <dd>
-            <span>{{vm.question.media}}</span>
-        </dd>
-        <dt><span data-translate="quizApp.question.answer1">Answer 1</span></dt>
-        <dd>
+        <dd><span>{{vm.question.title}}</span></dd>
+        <dt ng-if="vm.question.media.media"><span data-translate="quizApp.question.media">Вопрос</span></dt>
+        <dd ng-if="vm.question.media.media"><img src="{{vm.question.media.media}}" style="max-width:100%"></dd>
+        <dt style="{{(vm.question.rightAnswer === 1) ? 'color:green;' : 'color:darkred'}}"><span
+            data-translate="quizApp.question.answer1">Ответ 1</span></dt>
+        <dd style="{{(vm.question.rightAnswer === 1) ? 'color:green;' : 'color:darkred'}}">
             <span>{{vm.question.answer1}}</span>
         </dd>
-        <dt><span data-translate="quizApp.question.answer2">Answer 2</span></dt>
-        <dd>
+        <dt style="{{(vm.question.rightAnswer === 2) ? 'color:green;' : 'color:darkred'}}"><span
+            data-translate="quizApp.question.answer2">Ответ 2</span></dt>
+        <dd style="{{(vm.question.rightAnswer === 2) ? 'color:green;' : 'color:darkred'}}">
             <span>{{vm.question.answer2}}</span>
         </dd>
-        <dt><span data-translate="quizApp.question.answer3">Answer 3</span></dt>
-        <dd>
+        <dt style="{{(vm.question.rightAnswer === 3) ? 'color:green;' : 'color:darkred'}}"><span
+            data-translate="quizApp.question.answer3">Ответ 3</span></dt>
+        <dd style="{{(vm.question.rightAnswer === 3) ? 'color:green;' : 'color:darkred'}}">
             <span>{{vm.question.answer3}}</span>
         </dd>
-        <dt><span data-translate="quizApp.question.answer4">Answer 4</span></dt>
-        <dd>
+        <dt style="{{(vm.question.rightAnswer === 4) ? 'color:green;' : 'color:darkred'}}"><span
+            data-translate="quizApp.question.answer4">Ответ 4</span></dt>
+        <dd style="{{(vm.question.rightAnswer === 4) ? 'color:green;' : 'color:darkred'}}">
             <span>{{vm.question.answer4}}</span>
         </dd>
-        <dt><span data-translate="quizApp.question.rightAnswer">Right Answer</span></dt>
-        <dd>
-            <span>{{vm.question.rightAnswer}}</span>
-        </dd>
-        <dt><span data-translate="quizApp.question.category">Category</span></dt>
-        <dd>
-            <a ui-sref="category-detail({id:vm.question.category.id})">{{vm.question.category.name}}</a>
-        </dd>
+        <dt><span data-translate="quizApp.question.subcategory">Категория</span></dt>
+        <dd><a ui-sref="category-detail({id:vm.question.category.id})">{{vm.question.subcategory.name}}</a></dd>
     </dl>
-
-    <button type="submit"
-            ui-sref="{{ vm.previousState }}"
-            class="btn btn-info">
-        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
+    <button type="submit" ui-sref="{{ vm.previousState }}" class="btn btn-info"><span
+        class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
     </button>
-
-    <button type="button" ui-sref="question-detail.edit({id:vm.question.id})" class="btn btn-primary">
-        <span class="glyphicon glyphicon-pencil"></span>
-        <span class="hidden-xs hidden-sm" data-translate="entity.action.edit"> Edit</span>
-    </button>
+    <button type="button" ui-sref="question-detail.edit({id:vm.question.id})" class="btn btn-primary"><span
+        class="glyphicon glyphicon-pencil"></span> <span class="hidden-xs hidden-sm"
+                                                         data-translate="entity.action.edit">Edit</span></button>
 </div>

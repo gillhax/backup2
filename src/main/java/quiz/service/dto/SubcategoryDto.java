@@ -1,16 +1,16 @@
 package quiz.service.dto;
 
-import java.beans.ConstructorProperties;
-import java.util.List;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.beans.ConstructorProperties;
+import java.util.List;
 
 public class SubcategoryDto {
    Long id;
    @Min(1L)
    @Max(64L)
    String name;
-   List questions;
+    List<QuestionDto> questions;
 
    public Long getId() {
       return this.id;

@@ -12,12 +12,12 @@
                 "player": "Player",
                 "help": "Help",
                 "category": "Category",
-                "question": "Question",
+                "question": "Вопросы",
                 "subcategory": "Subcategory",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
-                "main": "Профиль",
+                "main": "",
                 "settings": "Настройки",
                 "password": "Пароль",
                 "sessions": "Сессии",
@@ -52,7 +52,7 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Если вы хотите <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">авторизироваться</a>, вы можете попробовать аккаунты по умолчанию:<br/>- Администратор (логин=\"admin\" и пароль=\"admin\") <br/>- Пользователь (логин=\"user\" и пароль=\"user\").",
+                "authenticated": "Если вы хотите <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">.",
                 "register": "У вас нет аккаунта? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Создать новый аккаунт</a>"
             },
             "error": {

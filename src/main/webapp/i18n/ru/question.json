@@ -25,7 +25,8 @@
             "answer3": "Ответ 3",
             "answer4": "Ответ 4",
             "rightAnswer": "Правильный ответ",
-            "category": "Ветвь"
+            "category": "Ветвь",
+            "subcategory": "Семья"
         }
     }
 }

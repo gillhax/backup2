@@ -1,28 +1,11 @@
 package quiz.service.util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import javax.inject.Inject;
-import org.apache.commons.collections4.map.LinkedMap;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import quiz.domain.Category;
-import quiz.domain.MediaContainer;
 import quiz.domain.Question;
 import quiz.domain.Subcategory;
 import quiz.repository.CategoryRepository;
@@ -30,7 +13,11 @@ import quiz.repository.QuestionRepository;
 import quiz.repository.SubcategoryRepository;
 import quiz.service.MediaContainerService;
 import quiz.service.VersionService;
-import quiz.system.error.ApiAssert;
+
+import javax.inject.Inject;
+import java.io.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -236,6 +223,9 @@ public class ParseQuestionsFile {
 
         for (Question question:
             questions) {
+            if (question.getTitle().equals("")) {
+                continue;
+            }
             questionRepository.save(question);
         }
 //        for (Category category:

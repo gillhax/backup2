@@ -5,9 +5,9 @@
         .module('quizApp')
         .controller('QuestionDialogController', QuestionDialogController);
 
-    QuestionDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'Question', 'Category'];
+    QuestionDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'Question', 'Category', 'Subcategory'];
 
-    function QuestionDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, Question, Category) {
+    function QuestionDialogController($timeout, $scope, $stateParams, $uibModalInstance, entity, Question, Category, Subcategory) {
         var vm = this;
 
         vm.question = entity;
@@ -16,6 +16,16 @@
         vm.openCalendar = openCalendar;
         vm.save = save;
         vm.categories = Category.query();
+        vm.subcategories = Subcategory.query();
+        vm.currentCat = null;
+
+        if (vm.question.rightAnswer === null) vm.question.rightAnswer = 1;
+
+        if (vm.question.subcategory) {
+            vm.question.subcategory = vm.question.subcategory;
+            vm.currentCat = vm.question.subcategory.category;
+        }
+
 
         $timeout(function (){
             angular.element('.form-group:eq(1)>input').focus();

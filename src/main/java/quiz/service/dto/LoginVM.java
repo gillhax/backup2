@@ -13,7 +13,7 @@ public class LoginVM {
       min = 1,
       max = 50
    )
-   private String login;
+   private String username;
    @NotNull
    @Size(
       min = 4,
@@ -22,11 +22,11 @@ public class LoginVM {
    private String password;
 
    public String toString() {
-       return "LoginVM{password=\'*****\', login=\'" + this.login + '\'' + '}';
+       return "LoginVM{password=\'*****\', username=\'" + this.username + '\'' + '}';
    }
 
-    public String getLogin() {
-        return this.login;
+    public String getUsername() {
+        return this.username;
    }
 
    public String getPassword() {
@@ -34,8 +34,8 @@ public class LoginVM {
    }
 
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String login) {
+        this.username = login;
    }
 
    public void setPassword(String password) {
