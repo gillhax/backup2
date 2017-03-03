@@ -1,34 +1,30 @@
 package quiz.service.dto;
 
 import io.swagger.annotations.ApiModelProperty;
-import java.beans.ConstructorProperties;
-import java.util.List;
+import org.hibernate.validator.constraints.Length;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.Length;
+import java.beans.ConstructorProperties;
+import java.util.List;
 
 public class OfferTraditionDtoIn {
    @NotNull
-   @Min(1L)
-   @Max(5120L)
-   @ApiModelProperty(
-      required = true
-   )
+   @Min(1)
+   @Max(5120)
+   @ApiModelProperty(required = true)
    String text;
-   @ApiModelProperty(
-      notes = "Base64 jpeg or png file. max 2048px (by height or width) and 5 MiB"
-   )
-   @Length(
-      max = 20971520
-   )
-   List base64Images;
+
+    @ApiModelProperty(notes = "Base64 jpeg or png file. max 2048px (by height or width) and 5 MiB")
+    @Length(max = 20971520)
+    List<String> base64Images;
 
    public String getText() {
       return this.text;
    }
 
-   public List getBase64Images() {
+    public List<String> getBase64Images() {
       return this.base64Images;
    }
 

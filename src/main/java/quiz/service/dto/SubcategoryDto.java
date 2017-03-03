@@ -7,8 +7,8 @@ import java.util.List;
 
 public class SubcategoryDto {
    Long id;
-   @Min(1L)
-   @Max(64L)
+    @Min(1)
+    @Max(64)
    String name;
     List<QuestionDto> questions;
 

@@ -12,6 +12,8 @@ import quiz.service.dto.PlayerDtoOut;
 import quiz.system.error.handler.dto.ResponseDto;
 import quiz.system.util.StaticWrapper;
 
+import static quiz.config.security.AuthoritiesConstants.ADMIN;
+import static quiz.config.security.AuthoritiesConstants.USER;
 import static quiz.security.SecurityUtils.getCurrentUserId;
 
 @RestController
@@ -30,7 +32,7 @@ public class PlayerController {
         this.playerService = playerService;
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_USER"})
+    @Secured({ADMIN, USER})
    @RequestMapping(
       value = {"/players/{id}"},
       method = {RequestMethod.GET}
@@ -43,7 +45,7 @@ public class PlayerController {
       return StaticWrapper.wrap(this.playerService.getPlayerById(id));
    }
 
-   @Secured({"ROLE_USER"})
+    @Secured({ADMIN, USER})
    @RequestMapping(
       value = {"/players/profile"},
       method = {RequestMethod.GET}
@@ -56,7 +58,7 @@ public class PlayerController {
        return StaticWrapper.wrap(this.playerService.getPlayerById(getCurrentUserId()));
    }
 
-   @Secured({"ROLE_USER"})
+    @Secured({ADMIN, USER})
    @RequestMapping(
       value = {"/players/profile"},
       method = {RequestMethod.PUT}
@@ -82,7 +84,7 @@ public class PlayerController {
       return StaticWrapper.wrap(this.playerService.getPlayersTop(userId));
    }
 
-   @Secured({"ROLE_USER"})
+    @Secured({ADMIN, USER})
    @RequestMapping(
       value = {"/players/profile/score"},
       method = {RequestMethod.GET}

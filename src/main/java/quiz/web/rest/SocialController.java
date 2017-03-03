@@ -1,4 +1,4 @@
-//package quiz.web.rest;
+package quiz.web.rest;
 //
 //import javax.inject.Inject;
 //import org.slf4j.Logger;
@@ -16,7 +16,7 @@
 //
 //@RestController
 //@RequestMapping({"/social"})
-//public class SocialController {
+public class SocialController {
 //   private final Logger log = LoggerFactory.getLogger(SocialController.class);
 //   @Inject
 //   private SocialService socialService;
@@ -38,4 +38,4 @@
 //         return new RedirectView(URIBuilder.fromUri("/#/social-register/no-provider").queryParam("success", "false").build().toString(), true);
 //      }
 //   }
-//}
+}

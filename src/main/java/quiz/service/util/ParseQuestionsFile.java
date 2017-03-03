@@ -1,5 +1,6 @@
 package quiz.service.util;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
@@ -13,8 +14,8 @@ import quiz.repository.QuestionRepository;
 import quiz.repository.SubcategoryRepository;
 import quiz.service.MediaContainerService;
 import quiz.service.VersionService;
+import quiz.system.error.ApiAssert;
 
-import javax.inject.Inject;
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,27 +23,44 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class ParseQuestionsFile {
-   @Inject
-   private CategoryRepository categoryRepository;
-   @Inject
-   private SubcategoryRepository subcategoryRepository;
-   @Inject
-   private QuestionRepository questionRepository;
-   @Inject
-   private MediaContainerService mediaContainerService;
-   @Inject
-   private VersionService versionService;
+
+    private final CategoryRepository categoryRepository;
+
+    private final SubcategoryRepository subcategoryRepository;
+
+    private final QuestionRepository questionRepository;
+
+    private final MediaContainerService mediaContainerService;
+
+    private final VersionService versionService;
+
+    public ParseQuestionsFile(CategoryRepository categoryRepository, SubcategoryRepository subcategoryRepository,
+                              QuestionRepository questionRepository, MediaContainerService mediaContainerService,
+                              VersionService versionService) {
+        this.categoryRepository = categoryRepository;
+        this.subcategoryRepository = subcategoryRepository;
+        this.questionRepository = questionRepository;
+        this.mediaContainerService = mediaContainerService;
+        this.versionService = versionService;
+    }
 
 
-    public  void main(List<MultipartFile> files) {
+    public void main(List<MultipartFile> files) {
+
         MultipartFile file = files.get(0);
+        String fileName = file.getOriginalFilename();
+        boolean excelFileExist = FilenameUtils.getExtension(fileName).equals("xlsx");
+        if (!excelFileExist) {
+            ApiAssert.unprocessable(true, "Отсутсвует Excel файл");
+        }
+
         Workbook workbook = null;
         try {
-         File var31 = new File(file.getOriginalFilename());
-         var31.createNewFile();
-         FileOutputStream var33 = new FileOutputStream(var31);
-         var33.write(file.getBytes());
-         var33.close();
+            File var31 = new File(file.getOriginalFilename());
+            var31.createNewFile();
+            FileOutputStream var33 = new FileOutputStream(var31);
+            var33.write(file.getBytes());
+            var33.close();
             FileInputStream excelFile = new FileInputStream(var31);
             workbook = new XSSFWorkbook(excelFile);
 
@@ -120,7 +138,7 @@ public class ParseQuestionsFile {
             categoryId = 0;
             while (rowCellIterator.hasNext()) {
                 Cell idCell = rowCellIterator.next();
-                if(idCell.getCellTypeEnum() == CellType.STRING && idCell.getStringCellValue().equals("-")) {
+                if (idCell.getCellTypeEnum() == CellType.STRING && idCell.getStringCellValue().equals("-")) {
                     rowCellIterator.next();
                     categoryId++;
                     continue;
@@ -139,7 +157,6 @@ public class ParseQuestionsFile {
         }
 
 
-
         //questions
         Sheet questionsSheet = workbook.getSheetAt(0);
         Iterator<Row> iterator = questionsSheet.iterator();
@@ -151,66 +168,60 @@ public class ParseQuestionsFile {
             cellIterator.next();
             Question question = new Question();
             //title
-            if(cellIterator.hasNext()) {
+            if (cellIterator.hasNext()) {
                 Cell currentCell = cellIterator.next();
                 question.setTitle(currentCell.getStringCellValue());
-            }
-            else {
+            } else {
                 continue;
             }
 
             //right answer 1
-            if(cellIterator.hasNext()) {
+            if (cellIterator.hasNext()) {
                 Cell currentCell = cellIterator.next();
                 question.setAnswer1(validateCellValue(currentCell));
                 question.setRightAnswer(1);
-            }
-            else {
+            } else {
                 continue;
             }
 
             //answer 2
-            if(cellIterator.hasNext()) {
+            if (cellIterator.hasNext()) {
                 Cell currentCell = cellIterator.next();
                 question.setAnswer2(validateCellValue(currentCell));
-            }
-            else {
+            } else {
                 continue;
             }
 
             //answer 3
-            if(cellIterator.hasNext()) {
+            if (cellIterator.hasNext()) {
                 Cell currentCell = cellIterator.next();
                 question.setAnswer3(validateCellValue(currentCell));
-            }
-            else {
+            } else {
                 continue;
             }
 
             //answer 4
-            if(cellIterator.hasNext()) {
+            if (cellIterator.hasNext()) {
                 Cell currentCell = cellIterator.next();
                 question.setAnswer4(validateCellValue(currentCell));
-            }
-            else {
+            } else {
                 continue;
             }
 
 
             //Set Subcategory
-            if(cellIterator.hasNext()) {
+            if (cellIterator.hasNext()) {
                 //Category
                 validateCellValue(cellIterator.next());
                 //Subcategory
                 String subcategoryName = validateCellValue(cellIterator.next());
                 question.setSubcategory(subcategoriesMap.get(subcategoriesDictionary.get(subcategoryName)));
-            }
-            else {
+            } else {
                 continue;
             }
 
             //Image
-            if(cellIterator.hasNext()) {
+            if (cellIterator.hasNext()) {
                 Cell currentCell = cellIterator.next();
 //                question.setMedia(currentCell.getStringCellValue() );
 
@@ -221,7 +232,7 @@ public class ParseQuestionsFile {
         System.out.println(questions);
 
 
-        for (Question question:
+        for (Question question :
             questions) {
             if (question.getTitle().equals("")) {
                 continue;
@@ -246,7 +257,7 @@ public class ParseQuestionsFile {
     }
 
 
-//   public void main(List<MultipartFile> files) {
+    //   public void main(List<MultipartFile> files) {
 //      XSSFWorkbook workbook = null;
 //      HashMap filesDictionary = new HashMap();
 //      MultipartFile excelMultipartFile = null;
@@ -452,8 +463,8 @@ public class ParseQuestionsFile {
 //      this.versionService.refreshQuestions();
 //   }
 //
-   private String validateCellValue(Cell cell) {
-      return cell.getCellTypeEnum() == CellType.STRING?cell.getStringCellValue():(cell.getCellTypeEnum() == CellType.NUMERIC?Long.toString((long)cell.getNumericCellValue()):"");
-   }
+    private String validateCellValue(Cell cell) {
+        return cell.getCellTypeEnum() == CellType.STRING ? cell.getStringCellValue() : (cell.getCellTypeEnum() == CellType.NUMERIC ? Long.toString((long) cell.getNumericCellValue()) : "");
+    }
 
 }

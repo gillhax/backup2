@@ -13,7 +13,6 @@ import quiz.service.dto.LoginVMOut;
 import quiz.service.security.TokenGenerator;
 import quiz.system.error.exception.SecurityUserException;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -50,12 +49,13 @@ public class SecurityServiceImpl implements SecurityService {
             throw new SecurityUserException("security.blocked");
         }
 
-        if (user.get().getSecurityTokens().size() >= accessTokeMaxCount) {
-            List<SecurityToken> securityTokens = user.get().getSecurityTokens();
-            for (int i = accessTokeMaxCount - 1; i < securityTokens.size(); i++) {
-                securityTokenRepository.delete(securityTokens.get(i));
-            }
-        }
+        //TODO:Revert this when fixed admin page
+//        if (user.get().getSecurityTokens().size() >= accessTokeMaxCount) {
+//            List<SecurityToken> securityTokens = user.get().getSecurityTokens();
+//            for (int i = accessTokeMaxCount - 1; i < securityTokens.size(); i++) {
+//                securityTokenRepository.delete(securityTokens.get(i));
+//            }
+//        }
 
         String accessToken = addNewTokenForUser(user.get());
 

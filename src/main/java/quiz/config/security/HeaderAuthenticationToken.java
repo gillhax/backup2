@@ -1,7 +1,8 @@
 package quiz.config.security;
 
-import com.sun.istack.internal.NotNull;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+
+import javax.validation.constraints.NotNull;
 
 class HeaderAuthenticationToken extends AbstractAuthenticationToken {
 

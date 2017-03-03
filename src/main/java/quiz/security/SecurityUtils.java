@@ -25,8 +25,14 @@ public final class SecurityUtils {
 
    public static Long getCurrentUserId() {
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-       quiz.domain.User user = (quiz.domain.User) authentication.getPrincipal();
-       return user.getId();
+       if (authentication != null) {
+           if (!authentication.getName().equals("anonymousUser")) {
+               quiz.domain.User user = (quiz.domain.User) authentication.getPrincipal();
+               return user.getId();
+           }
+           return null;
+       }
+       return null;
    }
 
    public static boolean isAuthenticated() {

@@ -12,8 +12,8 @@ import java.util.List;
 @Setter
 public class CategoryDto {
     Long id;
-    @Min(1L)
-    @Max(64L)
+    @Min(1)
+    @Max(64)
     String name;
     List<SubcategoryDto> subcategories;
 

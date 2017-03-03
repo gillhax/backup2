@@ -3,15 +3,6 @@ package quiz.config;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
 import com.codahale.metrics.servlets.MetricsServlet;
-import java.io.File;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.EnumSet;
-import javax.inject.Inject;
-import javax.servlet.DispatcherType;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.FilterRegistration.Dynamic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,29 +17,44 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import quiz.config.JHipsterProperties;
 import quiz.web.filter.CachingHttpHeadersFilter;
+
+import javax.inject.Inject;
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration.Dynamic;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.EnumSet;
 
 @Configuration
 public class WebConfigurer implements ServletContextInitializer, EmbeddedServletContainerCustomizer {
    private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
    @Inject
    private Environment env;
-   @Inject
-   private JHipsterProperties jHipsterProperties;
+
+
+    private final JHipsterProperties jHipsterProperties;
+
    @Autowired(
       required = false
    )
    private MetricRegistry metricRegistry;
 
-   public void onStartup(ServletContext servletContext) throws ServletException {
+    public WebConfigurer(JHipsterProperties jHipsterProperties) {
+        this.jHipsterProperties = jHipsterProperties;
+    }
+
+    public void onStartup(ServletContext servletContext) throws ServletException {
       if(this.env.getActiveProfiles().length != 0) {
          this.log.info("Web application configuration, using profiles: {}", Arrays.toString(this.env.getActiveProfiles()));
       }
 
       EnumSet disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
       this.initMetrics(servletContext, disps);
-      if(this.env.acceptsProfiles(new String[]{"prod"})) {
+        if (this.env.acceptsProfiles("prod")) {
          this.initCachingHttpHeadersFilter(servletContext, disps);
       }
 
@@ -66,7 +72,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
    private void setLocationForStaticAssets(ConfigurableEmbeddedServletContainer container) {
       String prefixPath = this.resolvePathPrefix();
       File root;
-      if(this.env.acceptsProfiles(new String[]{"prod"})) {
+       if (this.env.acceptsProfiles("prod")) {
          root = new File(prefixPath + "target/www/");
       } else {
          root = new File(prefixPath + "src/main/webapp/");

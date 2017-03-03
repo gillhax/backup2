@@ -98,8 +98,8 @@ public class Question implements Serializable {
       nullable = false
    )
    private String answer4;
-   @Min(1L)
-   @Max(4L)
+    @Min(1)
+    @Max(4)
    @NotNull
    @Column(
       name = "right_answer",
