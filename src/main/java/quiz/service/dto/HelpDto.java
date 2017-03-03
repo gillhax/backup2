@@ -1,38 +1,26 @@
 package quiz.service.dto;
 
-import java.beans.ConstructorProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import quiz.domain.util.ImageUrlJsonSerializer;
+
 import javax.validation.constraints.Size;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class HelpDto {
-   Integer id;
-   @Size(
-      min = 1,
-      max = 512
-   )
-   String path;
 
-   public Integer getId() {
-      return this.id;
-   }
+    Integer id;
 
-   public String getPath() {
-      return this.path;
-   }
+    @JsonSerialize(using = ImageUrlJsonSerializer.class)
+    @Size(
+        min = 1,
+        max = 512)
+    String path;
 
-   public void setId(Integer id) {
-      this.id = id;
-   }
-
-   public void setPath(String path) {
-      this.path = path;
-   }
-
-   public HelpDto() {
-   }
-
-   @ConstructorProperties({"id", "path"})
-   public HelpDto(Integer id, String path) {
-      this.id = id;
-      this.path = path;
-   }
 }

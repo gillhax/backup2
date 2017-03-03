@@ -11,8 +11,8 @@
         <dd>
             <span>{{vm.offer.date |  date:'medium'}}</span>
         </dd>
-        <dt><span data-translate="quizApp.offer.user">Пользователь</span></dt>
-        <dd>
+        <dt ng-if="quizApp.offer.user"><span data-translate="quizApp.offer.user">Пользователь</span></dt>
+        <dd ng-if="quizApp.offer.user">
             <span><a ui-sref="player-detail({id:vm.offer.user.id})">{{vm.offer.user.login}}</a></span>
         </dd>
         <dt><span data-translate="quizApp.offer.text">Описание</span></dt>

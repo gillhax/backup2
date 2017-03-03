@@ -25,7 +25,7 @@
             <tr ng-repeat="offer in vm.offers track by offer.id">
                 <td style="width: 60px"><a ui-sref="offer-detail({id:offer.id})">{{offer.id}}</a></td>
                 <td style="width: 140px">{{offer.date | date:'medium'}}</td>
-                <td style="width:60%;">{{offer.text.length > 100 ? offer.text.substring(0,100)+'...': offer.text}}</td>
+                <td style="width:60%;">{{offer.text.length > 70 ? offer.text.substring(0,70)+'...': offer.text}}</td>
                 <td>
                     <span ng-if="offer.withAttaches" class="glyphicon glyphicon-file"></span>
                 </td>

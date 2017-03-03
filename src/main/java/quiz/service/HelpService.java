@@ -1,9 +1,5 @@
 package quiz.service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -11,10 +7,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import quiz.domain.Help;
 import quiz.repository.HelpRepository;
-import quiz.service.ImageService;
-import quiz.service.VersionService;
 import quiz.service.dto.admin.HelpAdminDto;
 import quiz.system.error.ApiAssert;
+
+import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -85,9 +84,7 @@ public class HelpService {
       return result;
    }
 
-   @Transactional(
-      readOnly = true
-   )
+    @Transactional(readOnly = true)
    public List findAll() {
       this.log.debug("Request to get all Helps");
       List result = this.helpRepository.findAll();

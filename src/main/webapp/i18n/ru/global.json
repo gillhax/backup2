@@ -8,9 +8,9 @@
             "entities": {
                 "main": "Сущности",
                 "avatar": "Avatar",
-                "offer": "Offer",
+                "offer": "Предложения",
                 "player": "Player",
-                "help": "Help",
+                "help": "Помощь",
                 "category": "Category",
                 "question": "Вопросы",
                 "subcategory": "Subcategory",

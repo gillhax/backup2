@@ -26,7 +26,8 @@ module.exports = function(grunt) {
     cssmin: {
       options: {
         banner: '<%= banner %>',
-        report: 'gzip'
+          report: 'gzip',
+          rebase: false
       },
       minify: {
         src: 'src/loading-bar.css',

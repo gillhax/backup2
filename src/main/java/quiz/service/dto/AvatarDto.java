@@ -1,9 +1,10 @@
 package quiz.service.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import java.beans.ConstructorProperties;
-import javax.validation.constraints.Size;
 import quiz.domain.util.ImageUrlJsonSerializer;
+
+import javax.validation.constraints.Size;
+import java.beans.ConstructorProperties;
 
 public class AvatarDto {
    Integer id;
@@ -11,9 +12,7 @@ public class AvatarDto {
       min = 1,
       max = 512
    )
-   @JsonSerialize(
-      using = ImageUrlJsonSerializer.class
-   )
+   @JsonSerialize(using = ImageUrlJsonSerializer.class)
    String path;
 
    public Integer getId() {

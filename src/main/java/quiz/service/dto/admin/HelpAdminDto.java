@@ -1,24 +1,17 @@
 package quiz.service.dto.admin;
 
-import java.beans.ConstructorProperties;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import quiz.domain.Help;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class HelpAdminDto extends Help {
-   String file;
 
-   public String getFile() {
-      return this.file;
-   }
+    String file;
 
-   public void setFile(String file) {
-      this.file = file;
-   }
-
-   @ConstructorProperties({"file"})
-   public HelpAdminDto(String file) {
-      this.file = file;
-   }
-
-   public HelpAdminDto() {
-   }
 }

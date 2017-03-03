@@ -239,6 +239,8 @@ public class ParseQuestionsFile {
             }
             questionRepository.save(question);
         }
+
+        versionService.refreshQuestions();
 //        for (Category category:
 //             categories) {
 //            Category existCategory = categoryRepository.findOne(category.getId());

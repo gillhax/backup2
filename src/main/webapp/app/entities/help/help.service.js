@@ -7,7 +7,7 @@
     Help.$inject = ['$resource'];
 
     function Help ($resource) {
-        var resourceUrl =  'api/helps/:id';
+        var resourceUrl = 'api/help/:id';
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},
