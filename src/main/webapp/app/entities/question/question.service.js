@@ -10,9 +10,13 @@
         var resourceUrl =  'api/questions/:id';
 
         return $resource(resourceUrl, {}, {
-            'query': { method: 'GET', isArray: true},
+            'query': {
+                method: 'GET',
+                isArray: true
+            },
             'get': {
                 method: 'GET',
+
                 transformResponse: function (data) {
                     if (data) {
                         data = angular.fromJson(data);

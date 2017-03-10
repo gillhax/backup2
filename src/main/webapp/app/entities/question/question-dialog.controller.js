@@ -22,7 +22,6 @@
         if (vm.question.rightAnswer === null) vm.question.rightAnswer = 1;
 
         if (vm.question.subcategory) {
-            vm.question.subcategory = vm.question.subcategory;
             vm.currentCat = vm.question.subcategory.category;
         }
 

@@ -2,13 +2,6 @@ package quiz.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import io.swagger.annotations.ApiParam;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.sql.Timestamp;
-import java.util.Optional;
-import java.util.function.Function;
-import javax.inject.Inject;
-import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -17,14 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import quiz.converter.QuestionConverter;
 import quiz.domain.Question;
 import quiz.repository.QuestionRepository;
@@ -33,6 +19,13 @@ import quiz.service.VersionService;
 import quiz.web.rest.util.HeaderUtil;
 import quiz.web.rest.util.PaginationUtil;
 import springfox.documentation.annotations.ApiIgnore;
+
+import javax.inject.Inject;
+import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.sql.Timestamp;
+import java.util.Optional;
 
 @RestController
 @ApiIgnore
@@ -80,9 +73,12 @@ public class QuestionResource {
 
    @GetMapping({"/questions"})
    @Timed
-   public ResponseEntity getAllQuestions(@ApiParam Pageable pageable) throws URISyntaxException {
-      this.log.debug("REST request to get a page of Questions");
-      Page page = this.questionService.findAll(pageable);
+   public ResponseEntity getAllQuestions(@ApiParam Pageable pageable,
+                                         @RequestParam(value = "title", required = false) String title,
+                                         @RequestParam(value = "category", required = false) Long categoryId,
+                                         @RequestParam(value = "subcategory", required = false) Long subcategoryId
+   ) throws URISyntaxException {
+       Page page = this.questionService.findAll(pageable, title, categoryId, subcategoryId);
       HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/questions");
       return new ResponseEntity(page.getContent(), headers, HttpStatus.OK);
    }
