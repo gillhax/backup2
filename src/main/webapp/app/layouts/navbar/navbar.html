@@ -34,67 +34,18 @@
                     </a>
                 </li>
                 <li ui-sref-active="active" ng-switch-when="true">
+                    <a ui-sref="avatar" ng-click="vm.collapseNavbar()">
+                        <span class="glyphicon glyphicon-user"></span>&nbsp;
+                        <span data-translate="global.menu.entities.avatar">Avatar</span>
+                    </a>
+                </li>
+                <li ui-sref-active="active" ng-switch-when="true">
                     <a ui-sref="offer" ng-click="vm.collapseNavbar()">
                         <span class="glyphicon glyphicon-envelope"></span>&nbsp;
                         <span data-translate="global.menu.entities.offer">Offer</span>
                     </a>
                 </li>
-                <!--<li ng-class="{active: vm.$state.includes('entity')}" ng-switch-when="true" uib-dropdown class="dropdown pointer">-->
-                <!--<a class="dropdown-toggle" uib-dropdown-toggle href="" id="entity-menu">-->
-                <!--<span>-->
-                <!--<span class="glyphicon glyphicon-th-list"></span>-->
-                <!--<span class="hidden-sm" data-translate="global.menu.entities.main">-->
-                <!--Entities-->
-                <!--</span>-->
-                <!--<b class="caret"></b>-->
-                <!--</span>-->
-                <!--</a>-->
-                <!--<ul class="dropdown-menu" uib-dropdown-menu>-->
-                <!--<li ui-sref-active="active">-->
-                <!--<a ui-sref="offer" ng-click="vm.collapseNavbar()">-->
-                <!--<span class="glyphicon glyphicon-asterisk"></span>&nbsp;-->
-                <!--<span data-translate="global.menu.entities.offer">Offer</span>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li ui-sref-active="active">-->
-                <!--<a ui-sref="avatar" ng-click="vm.collapseNavbar()">-->
-                <!--<span class="glyphicon glyphicon-asterisk"></span>&nbsp;-->
-                <!--<span data-translate="global.menu.entities.avatar">Avatar</span>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li ui-sref-active="active">-->
-                <!--<a ui-sref="player" ng-click="vm.collapseNavbar()">-->
-                <!--<span class="glyphicon glyphicon-asterisk"></span>&nbsp;-->
-                <!--<span data-translate="global.menu.entities.player">Player</span>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li ui-sref-active="active">-->
-                <!--<a ui-sref="help" ng-click="vm.collapseNavbar()">-->
-                <!--<span class="glyphicon glyphicon-asterisk"></span>&nbsp;-->
-                <!--<span data-translate="global.menu.entities.help">Help</span>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li ui-sref-active="active">-->
-                <!--<a ui-sref="category" ng-click="vm.collapseNavbar()">-->
-                <!--<span class="glyphicon glyphicon-asterisk"></span>&nbsp;-->
-                <!--<span data-translate="global.menu.entities.category">Category</span>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li ui-sref-active="active">-->
-                <!--<a ui-sref="question" ng-click="vm.collapseNavbar()">-->
-                <!--<span class="glyphicon glyphicon-asterisk"></span>&nbsp;-->
-                <!--<span data-translate="global.menu.entities.question">Question</span>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li ui-sref-active="active">-->
-                <!--<a ui-sref="subcategory" ng-click="vm.collapseNavbar()">-->
-                <!--<span class="glyphicon glyphicon-asterisk"></span>&nbsp;-->
-                <!--<span data-translate="global.menu.entities.subcategory">Subcategory</span>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--&lt;!&ndash; jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here &ndash;&gt;-->
-                <!--</ul>-->
-                <!--</li>-->
+
                 <li ng-class="{active: vm.$state.includes('account')}" uib-dropdown class="dropdown pointer">
                 <li ui-sref-active="active" ng-switch-when="true">
                     <a href="" ng-click="vm.logout()" id="logout">
@@ -108,29 +59,6 @@
                         <span data-translate="global.menu.account.login">Sign in</span>
                     </a>
                 </li>
-                <!--<a class="dropdown-toggle" uib-dropdown-toggle href="" id="account-menu">-->
-                <!--<span>-->
-                <!--<span class="glyphicon glyphicon-user"></span>-->
-                <!--<span class="hidden-sm" data-translate="global.menu.account.main">-->
-                <!--Account-->
-                <!--</span>-->
-                <!--<b class="caret"></b>-->
-                <!--</span>-->
-                <!--</a>-->
-                <!--<ul class="dropdown-menu" uib-dropdown-menu>-->
-                <!--<li ui-sref-active="active" ng-switch-when="true">-->
-                <!--<a ui-sref="settings" ng-click="vm.collapseNavbar()">-->
-                <!--<span class="glyphicon glyphicon-wrench"></span>&nbsp;-->
-                <!--<span data-translate="global.menu.account.settings">Settings</span>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li ui-sref-active="active" ng-switch-when="true">-->
-                <!--<a ui-sref="password" ng-click="vm.collapseNavbar()">-->
-                <!--<span class="glyphicon glyphicon-lock"></span>&nbsp;-->
-                <!--<span data-translate="global.menu.account.password">Password</span>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--</ul>-->
                 </li>
                 <li ng-class="{active: vm.$state.includes('admin')}" ng-switch-when="true" has-authority="ROLE_ADMIN"
                     uib-dropdown class="dropdown pointer">

@@ -10,14 +10,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import quiz.converter.QuestionConverter;
 import quiz.domain.Category;
+import quiz.domain.MediaContainer;
 import quiz.domain.Question;
 import quiz.domain.Subcategory;
 import quiz.repository.CategoryRepository;
 import quiz.repository.QuestionRepository;
 import quiz.repository.SubcategoryRepository;
 import quiz.service.dto.QuestionDto;
+import quiz.service.dto.admin.QuestionAdminDto;
 import quiz.system.error.ApiAssert;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.contains;
@@ -35,12 +38,17 @@ public class QuestionService {
 
     private final CategoryRepository categoryRepository;
 
+
+    private final MediaContainerService mediaContainerService;
+
     public QuestionService(QuestionRepository questionRepository, QuestionConverter questionConverter,
-                           SubcategoryRepository subcategoryRepository, CategoryRepository categoryRepository) {
+                           SubcategoryRepository subcategoryRepository, CategoryRepository categoryRepository,
+                           MediaContainerService mediaContainerService) {
         this.questionRepository = questionRepository;
         this.questionConverter = questionConverter;
         this.subcategoryRepository = subcategoryRepository;
         this.categoryRepository = categoryRepository;
+        this.mediaContainerService = mediaContainerService;
     }
 
     public Question save(Question question) {
@@ -87,41 +95,6 @@ public class QuestionService {
             }
         }
 
-
-//
-//
-//        if (categoryId != null) {
-//            Category category = categoryRepository.findOne(categoryId);
-//            if (category != null) {
-//                if(question.getSubcategory() == null) {
-//                    question.setSubcategory(new Subcategory());
-//                }
-//                question.getSubcategory().setCategory(category);
-//            }
-//            else {
-//                matcher = matcher.withIgnorePaths("subcategory.category");
-//            }
-//        }
-//        else {
-//            matcher = matcher.withIgnorePaths("subcategory.category");
-//        }
-//
-//
-//
-//        if (subcategoryId != null) {
-//            Subcategory subcategory = subcategoryRepository.findOne(subcategoryId);
-//            if (subcategory != null) {
-//                question.setSubcategory(subcategory);
-//            }
-//            else {
-//                matcher = matcher.withIgnorePaths("subcategory");
-//            }
-//        }
-//        else {
-//            matcher = matcher.withIgnorePaths("subcategory");
-//        }
-
-
         Example<Question> example = Example.of(question, matcher);
         Page<Question> result = questionRepository.findAll(example, pageable);
         return result;
@@ -150,5 +123,54 @@ public class QuestionService {
         Question question = (Question) this.questionRepository.findOne(id);
         ApiAssert.notFound(question == null, "not-found.question");
         return this.questionConverter.toDTO(question);
+    }
+
+
+    public Question saveDto(QuestionAdminDto questionAdminDto) {
+        Question newQuestion = new Question();
+        newQuestion.setTitle(questionAdminDto.getTitle());
+        newQuestion.setSubcategory(questionAdminDto.getSubcategory());
+        newQuestion.setAnswer1(questionAdminDto.getAnswer1());
+        newQuestion.setAnswer2(questionAdminDto.getAnswer2());
+        newQuestion.setAnswer3(questionAdminDto.getAnswer3());
+        newQuestion.setAnswer4(questionAdminDto.getAnswer4());
+        newQuestion.setRightAnswer(questionAdminDto.getRightAnswer());
+
+        if (questionAdminDto.getFile() != null) {
+            MediaContainer media = mediaContainerService.create(questionAdminDto.getFile());
+            newQuestion.setMedia(media);
+        }
+
+        newQuestion.setVersion(new Timestamp(System.currentTimeMillis()));
+        Question result = questionRepository.save(newQuestion);
+        return result;
+    }
+
+
+    public Question updateDto(QuestionAdminDto questionAdminDto) {
+        Question question = questionRepository.findOne(questionAdminDto.getId());
+        ApiAssert.notFound(question == null, "not-found.entity");
+
+        question.setTitle(questionAdminDto.getTitle());
+        question.setSubcategory(questionAdminDto.getSubcategory());
+        question.setAnswer1(questionAdminDto.getAnswer1());
+        question.setAnswer2(questionAdminDto.getAnswer2());
+        question.setAnswer3(questionAdminDto.getAnswer3());
+        question.setAnswer4(questionAdminDto.getAnswer4());
+        question.setRightAnswer(questionAdminDto.getRightAnswer());
+
+        if (questionAdminDto.getFile() != null && question.getMedia() != null && !questionAdminDto.getRemoveMedia()) {
+            MediaContainer media = mediaContainerService.update(questionAdminDto.getMedia().getId(), questionAdminDto.getFile());
+            question.setMedia(media);
+        } else if (questionAdminDto.getFile() != null && question.getMedia() == null && !questionAdminDto.getRemoveMedia()) {
+            MediaContainer media = mediaContainerService.create(questionAdminDto.getFile());
+            question.setMedia(media);
+        }
+        if (questionAdminDto.getRemoveMedia()) {
+            question.setMedia(null);
+        }
+
+        question.setVersion(new Timestamp(System.currentTimeMillis()));
+        return question;
     }
 }

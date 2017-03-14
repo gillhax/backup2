@@ -113,18 +113,8 @@ public class Question implements Serializable {
    @JoinColumn(name = "subcategory_id")
    private Subcategory subcategory;
 
-   public boolean equals(Object o) {
-      if(this == o) {
-         return true;
-      } else if(o != null && this.getClass() == o.getClass()) {
-         Question question = (Question)o;
-          return (question.id != null && this.id != null) && Objects.equals(this.id, question.id);
-      } else {
-         return false;
-      }
-   }
 
-   public int hashCode() {
+    public int hashCode() {
       return Objects.hashCode(this.id);
    }
 

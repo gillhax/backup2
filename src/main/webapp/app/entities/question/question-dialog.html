@@ -5,6 +5,7 @@
         <h4 class="modal-title" id="myQuestionLabel" data-translate="quizApp.question.home.createOrEditLabel">Create or
             edit a Question</h4></div>
     <div class="modal-body">
+        <jhi-alert></jhi-alert>
         <jhi-alert-error></jhi-alert-error>
         <div class="form-group" ng-show="vm.question.id"><label for="id"
                                                                 data-translate="global.field.id">ID</label><input
@@ -119,6 +120,20 @@
                                                         data-translate="entity.validation.required">This field is
             required.</p></div>
 
+
+        <div>
+
+            <label class="control-label"><input type="checkbox" ng-model="vm.checkedImg"> Картинка</label>
+        </div>
+
+        <div class="form-group" ng-show="vm.checkedImg">
+            <input type="file" accept="image/*" class="form-control"
+                   fileread="vm.tempFile">
+            <img src="{{vm.tempFile}}" style="padding-top:10px; max-width: 100%">
+            <img ng-if="vm.question.media.media && !vm.tempFile" src="{{vm.question.media.media}}"
+                 style="padding-top:10px; max-width: 100%">
+        </div>
+
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
                 <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
@@ -128,4 +143,6 @@
                 <span class="glyphicon glyphicon-save"></span>&nbsp;<span data-translate="entity.action.save">Save</span>
             </button>
         </div>
+
+    </div>
 </form>

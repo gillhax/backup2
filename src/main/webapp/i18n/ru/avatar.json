@@ -2,21 +2,21 @@
     "quizApp": {
         "avatar" : {
             "home": {
-                "title": "Avatars",
-                "createLabel": "Создать новый Avatar",
-                "createOrEditLabel": "Создать или отредактировать Avatar",
+                "title": "Аватары",
+                "createLabel": "Создать новый аватар",
+                "createOrEditLabel": "Создать или отредактировать аватар",
                 "search": "Найти Avatar"
             },
-            "created": "Новый Avatar создан с идентификатором {{ param }}",
-            "updated": "Avatar обновлен с идентификатором {{ param }}",
-            "deleted": "Avatar удален с идентификатором {{ param }}",
+            "created": "Новый аватар создан с идентификатором {{ param }}",
+            "updated": "Аватар обновлен с идентификатором {{ param }}",
+            "deleted": "Аватар удален с идентификатором {{ param }}",
             "delete": {
-                "question": "Вы уверены что хотите удалить Avatar {{ id }}?"
+                "question": "Вы уверены что хотите удалить аватар {{ id }}?"
             },
             "detail": {
-                "title": "Avatar"
+                "title": "Аватар"
             },
-            "path": "Path"
+            "path": "Аватар"
         }
     }
 }

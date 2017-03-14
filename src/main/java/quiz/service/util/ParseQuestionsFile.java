@@ -1,12 +1,16 @@
 package quiz.service.util;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import quiz.domain.Category;
+import quiz.domain.MediaContainer;
 import quiz.domain.Question;
 import quiz.domain.Subcategory;
 import quiz.repository.CategoryRepository;
@@ -16,7 +20,10 @@ import quiz.service.MediaContainerService;
 import quiz.service.VersionService;
 import quiz.system.error.ApiAssert;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -46,23 +53,31 @@ public class ParseQuestionsFile {
 
 
     public void main(List<MultipartFile> files) {
+        XSSFWorkbook workbook = null;
 
-        MultipartFile file = files.get(0);
-        String fileName = file.getOriginalFilename();
-        boolean excelFileExist = FilenameUtils.getExtension(fileName).equals("xlsx");
-        if (!excelFileExist) {
+        HashMap<String, MultipartFile> filesDictionary = new HashMap<>();
+
+        MultipartFile excelMultipartFile = null;
+        Iterator filesIterator = files.iterator();
+
+        while (filesIterator.hasNext()) {
+            MultipartFile file = (MultipartFile) filesIterator.next();
+            String categorySheet = file.getOriginalFilename();
+            if (FilenameUtils.getExtension(categorySheet).equals("xlsx")) {
+                excelMultipartFile = file;
+            } else {
+                filesDictionary.put(categorySheet, file);
+            }
+        }
+
+        if (excelMultipartFile == null) {
             ApiAssert.unprocessable(true, "Отсутсвует Excel файл");
         }
 
-        Workbook workbook = null;
+
         try {
-            File var31 = new File(file.getOriginalFilename());
-            var31.createNewFile();
-            FileOutputStream var33 = new FileOutputStream(var31);
-            var33.write(file.getBytes());
-            var33.close();
-            FileInputStream excelFile = new FileInputStream(var31);
-            workbook = new XSSFWorkbook(excelFile);
+            InputStream inputStream = new BufferedInputStream(excelMultipartFile.getInputStream());
+            workbook = new XSSFWorkbook(inputStream);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -157,6 +172,8 @@ public class ParseQuestionsFile {
         }
 
 
+        HashMap<Question, MultipartFile> questionMediaDictionary = new HashMap<>();
+
         //questions
         Sheet questionsSheet = workbook.getSheetAt(0);
         Iterator<Row> iterator = questionsSheet.iterator();
@@ -209,13 +226,17 @@ public class ParseQuestionsFile {
             }
 
 
+            boolean rightSubcategory = false;
             //Set Subcategory
             if (cellIterator.hasNext()) {
                 //Category
                 validateCellValue(cellIterator.next());
                 //Subcategory
                 String subcategoryName = validateCellValue(cellIterator.next());
-                question.setSubcategory(subcategoriesMap.get(subcategoriesDictionary.get(subcategoryName)));
+                if (subcategoriesDictionary.containsKey(subcategoryName)) {
+                    question.setSubcategory(subcategoriesMap.get(subcategoriesDictionary.get(subcategoryName)));
+                    rightSubcategory = true;
+                }
             } else {
                 continue;
             }
@@ -223,13 +244,21 @@ public class ParseQuestionsFile {
             //Image
             if (cellIterator.hasNext()) {
                 Cell currentCell = cellIterator.next();
-//                question.setMedia(currentCell.getStringCellValue() );
-
+                String imageName = validateCellValue(currentCell);
+                if (!imageName.isEmpty() && !imageName.equals("")) {
+                    if (filesDictionary.containsKey(imageName)) {
+                        questionMediaDictionary.put(question, filesDictionary.get(imageName));
+                    } else {
+                        ApiAssert.unprocessable(true, "Нету картинки, указанной в " + currentCell.getRowIndex() + "-ой строке Excel файла");
+                    }
+                }
             }
-
-            questions.add(question);
+            if (rightSubcategory) {
+                questions.add(question);
+            } else {
+                ApiAssert.unprocessable(true, "Не верно указана семья в " + currentRow.getRowNum() + "-ой строке Excel файла");
+            }
         }
-        System.out.println(questions);
 
 
         for (Question question :
@@ -237,7 +266,12 @@ public class ParseQuestionsFile {
             if (question.getTitle().equals("")) {
                 continue;
             }
+            if (questionMediaDictionary.containsKey(question)) {
+                MediaContainer media = mediaContainerService.create(questionMediaDictionary.get(question));
+                question.setMedia(media);
+            }
             questionRepository.save(question);
+
         }
 
         versionService.refreshQuestions();
@@ -465,6 +499,7 @@ public class ParseQuestionsFile {
 //      this.versionService.refreshQuestions();
 //   }
 //
+
     private String validateCellValue(Cell cell) {
         return cell.getCellTypeEnum() == CellType.STRING ? cell.getStringCellValue() : (cell.getCellTypeEnum() == CellType.NUMERIC ? Long.toString((long) cell.getNumericCellValue()) : "");
     }
