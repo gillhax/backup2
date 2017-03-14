@@ -1,24 +1,18 @@
 package quiz.web.rest.util;
 
-import java.beans.ConstructorProperties;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class FilesUpload {
-   private List files;
+    private List<MultipartFile> files;
 
-   public List getFiles() {
-      return this.files;
-   }
-
-   public void setFiles(List files) {
-      this.files = files;
-   }
-
-   public FilesUpload() {
-   }
-
-   @ConstructorProperties({"files"})
-   public FilesUpload(List files) {
-      this.files = files;
-   }
 }

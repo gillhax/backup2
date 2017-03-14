@@ -24,6 +24,9 @@
         if (pagingParams.currentCat) {
             vm.currentCat = categories[pagingParams.currentCat];
         }
+        else {
+            vm.currentCat = null;
+        }
 
         if (pagingParams.currentSubcat) {
             vm.currentSubcat = subcategories[pagingParams.currentSubcat];
@@ -39,9 +42,7 @@
                 sort: sort(),
                 title: vm.title,
                 category: (vm.currentCat !== undefined && vm.currentCat !== null) ? vm.currentCat.id : null,
-                // category: (vm.currentCatId !== undefined && vm.currentCatId !== null) ? vm.currentCatId : null,
                 subcategory: (vm.currentSubcat !== undefined && vm.currentSubcat !== null) ? vm.currentSubcat.id : null
-                // subcategory: (vm.currentSubcatId !== undefined && vm.currentSubcatId !== null) ? vm.currentSubcatId : null
             }, onSuccess, onError);
             function sort() {
                 var result = [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc')];

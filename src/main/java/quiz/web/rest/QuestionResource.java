@@ -16,15 +16,15 @@ import quiz.domain.Question;
 import quiz.repository.QuestionRepository;
 import quiz.service.QuestionService;
 import quiz.service.VersionService;
+import quiz.service.dto.admin.QuestionAdminDto;
+import quiz.system.error.handler.dto.ResponseDto;
+import quiz.system.util.StaticWrapper;
 import quiz.web.rest.util.HeaderUtil;
 import quiz.web.rest.util.PaginationUtil;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.inject.Inject;
-import javax.validation.Valid;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.Timestamp;
 import java.util.Optional;
 
 @RestController
@@ -41,37 +41,36 @@ public class QuestionResource {
    @Inject
    private VersionService versionService;
 
-   @PostMapping({"/questions"})
-   @Timed
-   public ResponseEntity createQuestion(@Valid @RequestBody Question question) throws URISyntaxException {
-      this.log.debug("REST request to save Question : {}", question);
-      if(question.getId() != null) {
-         return ((BodyBuilder)ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("question", "idexists", "A new question cannot already have an ID"))).body((Object)null);
-      } else if(this.questionRepository.findOneByTitle(question.getTitle().toLowerCase()).isPresent()) {
-         return ((BodyBuilder)ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("userManagement", "questionexists", "Такой вопрос уже существует"))).body((Object)null);
-      } else {
-         question.setVersion((Timestamp)null);
-         Question result = this.questionService.save(question);
-         this.versionService.refreshQuestions();
-         return ((BodyBuilder)ResponseEntity.created(new URI("/api/questions/" + result.getId())).headers(HeaderUtil.createEntityCreationAlert("question", result.getId().toString()))).body(result);
-      }
-   }
 
-   @PutMapping({"/questions"})
-   @Timed
-   public ResponseEntity updateQuestion(@Valid @RequestBody Question question) throws URISyntaxException {
-      this.log.debug("REST request to update Question : {}", question);
-      if(question.getId() == null) {
-         return this.createQuestion(question);
-      } else {
-         question.setVersion(new Timestamp(System.currentTimeMillis()));
-         Question result = this.questionService.save(question);
-         this.versionService.refreshQuestions();
-         return ((BodyBuilder)ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert("question", question.getId().toString()))).body(result);
-      }
-   }
+    @ApiIgnore
+    @Timed
+    @RequestMapping(
+        value = {"questions"},
+        method = {RequestMethod.POST}
+    )
+    public ResponseDto createQuestion(@RequestBody QuestionAdminDto questionAdminDto) throws URISyntaxException {
+        Question result = this.questionService.saveDto(questionAdminDto);
+        this.versionService.refreshQuestions();
+        return StaticWrapper.wrap(result);
+    }
 
-   @GetMapping({"/questions"})
+
+    @ApiIgnore
+    @RequestMapping(
+        value = {"/questions"},
+        method = {RequestMethod.PUT}
+    )
+    @Timed
+    public ResponseEntity updateHelpAdmin(@RequestBody QuestionAdminDto questionAdminDto) {
+        Question question = questionService.updateDto(questionAdminDto);
+        versionService.refreshQuestions();
+        return Optional.ofNullable(question).map((result) -> {
+            return new ResponseEntity(result, HttpStatus.OK);
+        }).orElse(new ResponseEntity(HttpStatus.NOT_FOUND));
+    }
+
+
+    @GetMapping({"/questions"})
    @Timed
    public ResponseEntity getAllQuestions(@ApiParam Pageable pageable,
                                          @RequestParam(value = "title", required = false) String title,

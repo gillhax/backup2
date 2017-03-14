@@ -89,7 +89,7 @@
 
 
         <div style="margin-top: 15px; margin-right: 15px" class="pull-right">
-            <upload-button class="btn btn-primary btn-upload pull-right" url="/api/v1/parser/upload" data="files"
+            <upload-button class="btn btn-primary btn-upload pull-right" url="/api/parser/upload" data="files"
                            param="files" multiple="true"><span class="glyphicon glyphicon-cloud-download"></span> Список
                 вопросов
             </upload-button>
@@ -112,7 +112,7 @@
             <select class="form-control" id="field_category" name="category" ng-model="vm.currentCat"
                     ng-options="category as category.name for category in vm.categories track by category.id"
                     ng-change="vm.loadAllWithSearch()">
-                <option value=""></option>
+                <option style="color:gray" value="">Все семьи</option>
             </select>
         </div>
         <div class="col-md-3">
@@ -121,7 +121,7 @@
                     ng-model="vm.currentSubcat"
                     ng-options="subcategory as subcategory.name for subcategory in vm.subcategories | filter:{category : vm.currentCat} track by subcategory.id"
                     required>
-                <option value=""></option>
+                <option style="color:gray" value="">Все ветви</option>
             </select>
         </div>
             </div>

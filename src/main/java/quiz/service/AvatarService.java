@@ -1,16 +1,15 @@
 package quiz.service;
 
-import com.sun.org.apache.bcel.internal.generic.LREM;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import quiz.converter.AvatarConverter;
 import quiz.domain.Avatar;
-import quiz.domain.Help;
 import quiz.repository.AvatarRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.stereotype.Service;
-import quiz.service.dto.AvatarDto;
+import quiz.service.dto.admin.AvatarAdminDto;
+import quiz.system.error.ApiAssert;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -38,12 +37,7 @@ public class AvatarService {
     @Inject
     private VersionService versionService;
 
-    /**
-     * Add a avatar.
-     *
-     * @param image the entity to save
-     * @return the persisted entity
-     */
+
     public Avatar create(MultipartFile image) {
         Avatar avatar = new Avatar();
 
@@ -67,16 +61,36 @@ public class AvatarService {
         return result;
     }
 
-    /**
-     * Save a avatar.
-     *
-     * @param avatar the entity to save
-     * @return the persisted entity
-     */
+
+    public Avatar saveDto(AvatarAdminDto avatarAdminDto) {
+        Avatar newAvatar = new Avatar();
+        if (avatarAdminDto.getFile() != null) {
+            String imagePath = imageService.saveBase64ImageNoLimit(avatarAdminDto.getFile(), "avatars");
+            newAvatar.setPath(imagePath);
+
+            return avatarRepository.save(newAvatar);
+        } else {
+            return null;
+        }
+    }
+
+    public Avatar updateDto(AvatarAdminDto avatarAdminDto) {
+        Avatar avatar = avatarRepository.findOne(avatarAdminDto.getId());
+        ApiAssert.notFound(avatar == null, "not-found.entity");
+        if (avatarAdminDto.getFile() != null) {
+            String imagePath = this.imageService.saveBase64ImageNoLimit(avatarAdminDto.getFile(), "avatars");
+            imageService.delete(avatarAdminDto.getPath());
+            avatar.setPath(imagePath);
+            return avatar;
+        } else {
+            return avatar;
+        }
+    }
+
     public Avatar update(int avatarId, MultipartFile image) {
         Avatar avatar = avatarRepository.findOne(avatarId);
         //TODO: check on exist
-        if(avatar == null) return null;
+        if (avatar == null) return null;
         imageService.save(
             image,
             "avatar",
@@ -98,9 +112,9 @@ public class AvatarService {
     }
 
     /**
-     *  Get all the avatars.
+     * Get all the avatars.
      *
-     *  @return the list of entities
+     * @return the list of entities
      */
     @Transactional(readOnly = true)
     public List<Avatar> findAll() {
@@ -111,10 +125,10 @@ public class AvatarService {
     }
 
     /**
-     *  Get one avatar by id.
+     * Get one avatar by id.
      *
-     *  @param id the id of the entity
-     *  @return the entity
+     * @param id the id of the entity
+     * @return the entity
      */
     @Transactional(readOnly = true)
     public Avatar findOne(Integer id) {
@@ -124,9 +138,9 @@ public class AvatarService {
     }
 
     /**
-     *  Delete the  avatar by id.
+     * Delete the  avatar by id.
      *
-     *  @param id the id of the entity
+     * @param id the id of the entity
      */
     public void delete(Integer id) {
         log.debug("Request to delete Avatar : {}", id);

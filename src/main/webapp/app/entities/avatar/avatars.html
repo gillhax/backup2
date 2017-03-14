@@ -1,32 +1,27 @@
 <div>
-    <h2 data-translate="quizApp.avatar.home.title">Avatars</h2>
-    <jhi-alert></jhi-alert>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-xs-4 no-padding-left">
-                <button class="btn btn-primary" ui-sref="avatar.new" >
-                    <span class="glyphicon glyphicon-plus"></span>
-                    <span  data-translate="quizApp.avatar.home.createLabel">
-                        Create new Avatar
-                    </span>
-                </button>
-            </div>
+    <div class="row container-fluid">
+        <div class="pull-left"><h2 data-translate="quizApp.avatar.home.title">Helps</h2></div>
+        <div style="margin-top: 15px" class="pull-right">
+            <button class="btn btn-primary" ui-sref="avatar.new"><span class="glyphicon glyphicon-plus"></span>
+                <span>Новый аватар</span></button>
         </div>
     </div>
+    <br>
+    <jhi-alert></jhi-alert>
     <br/>
     <div class="table-responsive">
         <table class="jh-table table table-striped">
             <thead>
                 <tr>
                     <th><span data-translate="global.field.id">ID</span></th>
-                    <th><span data-translate="quizApp.avatar.path">Path</span></th>
+                    <th class="text-center"><span data-translate="quizApp.avatar.path">Path</span></th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="avatar in vm.avatars track by avatar.id">
-                    <td><a ui-sref="avatar-detail({id:avatar.id})">{{avatar.id}}</a></td>
-                    <td>{{avatar.path}}</td>
+                    <td style="width: 80px"><a ui-sref="avatar-detail({id:avatar.id})">{{avatar.id}}</a></td>
+                    <td style="width: 82px" align="center"><img width="81px" height="81px" src="{{avatar.path}}"></td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
                             <button type="submit"
