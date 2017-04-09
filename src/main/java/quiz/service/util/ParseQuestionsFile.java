@@ -20,10 +20,7 @@ import quiz.service.MediaContainerService;
 import quiz.service.VersionService;
 import quiz.system.error.ApiAssert;
 
-import java.io.BufferedInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -51,6 +48,15 @@ public class ParseQuestionsFile {
         this.versionService = versionService;
     }
 
+    private String convertEncodingFileName(String fileName) {
+        try {
+
+            return new String(fileName.getBytes("ISO-8859-1"), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return fileName;
+        }
+    }
+
 
     public void main(List<MultipartFile> files) {
         XSSFWorkbook workbook = null;
@@ -62,7 +68,7 @@ public class ParseQuestionsFile {
 
         while (filesIterator.hasNext()) {
             MultipartFile file = (MultipartFile) filesIterator.next();
-            String categorySheet = file.getOriginalFilename();
+            String categorySheet = convertEncodingFileName(file.getOriginalFilename());
             if (FilenameUtils.getExtension(categorySheet).equals("xlsx")) {
                 excelMultipartFile = file;
             } else {
@@ -76,8 +82,7 @@ public class ParseQuestionsFile {
 
 
         try {
-            InputStream inputStream = new BufferedInputStream(excelMultipartFile.getInputStream());
-            workbook = new XSSFWorkbook(inputStream);
+            workbook = new XSSFWorkbook(excelMultipartFile.getInputStream());
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -182,12 +187,18 @@ public class ParseQuestionsFile {
         while (iterator.hasNext()) {
             Row currentRow = iterator.next();
             Iterator<Cell> cellIterator = currentRow.iterator();
-            cellIterator.next();
             Question question = new Question();
             //title
             if (cellIterator.hasNext()) {
                 Cell currentCell = cellIterator.next();
-                question.setTitle(currentCell.getStringCellValue());
+                String value = validateCellValue(currentCell);
+                if (value != null && !value.equals("")) {
+                    question.setTitle(value);
+                } else {
+                    Cell nextCurrentCell = cellIterator.next();
+                    question.setTitle(validateCellValue(nextCurrentCell));
+
+                }
             } else {
                 continue;
             }
