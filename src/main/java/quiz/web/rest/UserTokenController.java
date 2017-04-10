@@ -32,7 +32,7 @@ public class UserTokenController {
     public ResponseEntity authenticate(@Valid @RequestBody LoginVM loginVM, HttpServletResponse response) {
         try {
             String token = securityService.login(loginVM).getToken();
-            response.addHeader("Authorization", "Bearer " + token);
+            response.addHeader("Authorization", token);
             return ResponseEntity.ok(new JWTToken(token));
         } catch (AuthenticationException var7) {
             return new ResponseEntity(Collections.singletonMap("AuthenticationException", var7.getLocalizedMessage()), HttpStatus.UNAUTHORIZED);

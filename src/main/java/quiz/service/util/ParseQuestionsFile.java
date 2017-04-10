@@ -20,10 +20,7 @@ import quiz.service.MediaContainerService;
 import quiz.service.VersionService;
 import quiz.system.error.ApiAssert;
 
-import java.io.BufferedInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -74,16 +71,21 @@ public class ParseQuestionsFile {
             ApiAssert.unprocessable(true, "Отсутсвует Excel файл");
         }
 
-
         try {
-            InputStream inputStream = new BufferedInputStream(excelMultipartFile.getInputStream());
-            workbook = new XSSFWorkbook(inputStream);
+            File var31 = new File(excelMultipartFile.getOriginalFilename());
+            var31.createNewFile();
+            FileOutputStream var33 = new FileOutputStream(var31);
+            var33.write(excelMultipartFile.getBytes());
+            var33.close();
+            FileInputStream excelFile = new FileInputStream(var31);
+            workbook = new XSSFWorkbook(excelFile);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
         List<Category> categories = new ArrayList<>();
         //family sheet
@@ -187,7 +189,7 @@ public class ParseQuestionsFile {
             //title
             if (cellIterator.hasNext()) {
                 Cell currentCell = cellIterator.next();
-                question.setTitle(currentCell.getStringCellValue());
+                question.setTitle(optimizeBreakLine(validateCellValue(currentCell)));
             } else {
                 continue;
             }
@@ -195,7 +197,7 @@ public class ParseQuestionsFile {
             //right answer 1
             if (cellIterator.hasNext()) {
                 Cell currentCell = cellIterator.next();
-                question.setAnswer1(validateCellValue(currentCell));
+                question.setAnswer1(optimizeBreakLine(validateCellValue(currentCell)));
                 question.setRightAnswer(1);
             } else {
                 continue;
@@ -204,7 +206,7 @@ public class ParseQuestionsFile {
             //answer 2
             if (cellIterator.hasNext()) {
                 Cell currentCell = cellIterator.next();
-                question.setAnswer2(validateCellValue(currentCell));
+                question.setAnswer2(optimizeBreakLine(validateCellValue(currentCell)));
             } else {
                 continue;
             }
@@ -212,7 +214,7 @@ public class ParseQuestionsFile {
             //answer 3
             if (cellIterator.hasNext()) {
                 Cell currentCell = cellIterator.next();
-                question.setAnswer3(validateCellValue(currentCell));
+                question.setAnswer3(optimizeBreakLine(validateCellValue(currentCell)));
             } else {
                 continue;
             }
@@ -220,7 +222,7 @@ public class ParseQuestionsFile {
             //answer 4
             if (cellIterator.hasNext()) {
                 Cell currentCell = cellIterator.next();
-                question.setAnswer4(validateCellValue(currentCell));
+                question.setAnswer4(optimizeBreakLine(validateCellValue(currentCell)));
             } else {
                 continue;
             }
@@ -248,12 +250,15 @@ public class ParseQuestionsFile {
                     }
                 }
             }
+            if (!question.getTitle().equals("")
+                && !question.getAnswer1().equals("") && !question.getAnswer2().equals("")
+                && !question.getAnswer3().equals("") && !question.getAnswer4().equals("")) {
+                if (question.getSubcategory() != null) {
+                    questions.add(question);
+                } else {
+                    ApiAssert.unprocessable(true, "Не верно указана ветвь в " + currentRow.getRowNum() + "-ой строке Excel файла");
 
-            if (question.getSubcategory() != null) {
-                questions.add(question);
-            } else {
-                ApiAssert.unprocessable(true, "Не верно указана ветвь в " + currentRow.getRowNum() + "-ой строке Excel файла");
-
+                }
             }
         }
 
@@ -292,6 +297,25 @@ public class ParseQuestionsFile {
 
     private String validateCellValue(Cell cell) {
         return cell.getCellTypeEnum() == CellType.STRING ? cell.getStringCellValue() : (cell.getCellTypeEnum() == CellType.NUMERIC ? Long.toString((long) cell.getNumericCellValue()) : "");
+    }
+
+    private static String optimizeBreakLine(String text) {
+        if (text.endsWith("\n")) {
+            while (text.endsWith("\n")) {
+                text = dellBreakLine(text);
+            }
+        }
+        return text;
+    }
+
+    private static String dellBreakLine(String text) {
+        if (text.endsWith("\n")) {
+            int pos = text.lastIndexOf("\n");
+            StringBuilder string = new StringBuilder(text);
+            string.setLength(pos);
+            return string.toString();
+        }
+        return text;
     }
 
 }

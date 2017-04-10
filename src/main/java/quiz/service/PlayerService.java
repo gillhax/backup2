@@ -17,6 +17,7 @@ import quiz.service.dto.PlayerDtoOut;
 import quiz.system.error.ApiAssert;
 
 import javax.inject.Inject;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +66,7 @@ public class PlayerService {
    }
 
    public PlayerDtoOut getPlayerById(Long id) {
-      Player player = (Player)this.playerRepository.findOne(id);
+       Player player = this.playerRepository.findOne(id);
       ApiAssert.notFound(player == null, "not-found.player");
       return this.playerConverter.toDTO(player);
    }
@@ -82,8 +83,9 @@ public class PlayerService {
       if(playerDtoIn.getName() != null) {
          player.setName(playerDtoIn.getName());
       }
+       player.setVersion(new Timestamp(System.currentTimeMillis()));
 
-      Player savedPlayer1 = (Player)this.playerRepository.save(player);
+       Player savedPlayer1 = (Player) this.playerRepository.save(player);
       return this.playerConverter.toDTO(savedPlayer1);
    }
 
@@ -91,7 +93,7 @@ public class PlayerService {
       PageRequest pageable = new PageRequest(0, 100);
        List<Player> players = this.playerRepository.findOrderByScore(pageable);
        List<PlayerDtoOut> playersDto = this.playerConverter.toDTOs(players);
-      Long playerPosition = null;
+       Long playerPosition = -1L;
       if(userId != null) {
          playerPosition = this.playerRepository.findPlayerPosition(userId);
       }

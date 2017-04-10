@@ -1,21 +1,16 @@
 package quiz.domain;
 
-import java.io.Serializable;
-import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
-import javax.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.cloud.cloudfoundry.com.fasterxml.jackson.annotation.JsonIgnore;
-import quiz.domain.Avatar;
-import quiz.domain.User;
+
+import javax.persistence.*;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Objects;
 
 @Entity
 @Table(
@@ -24,6 +19,8 @@ import quiz.domain.User;
 @Cache(
    usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE
 )
+@Getter
+@Setter
 public class Player implements Serializable {
    private static final long serialVersionUID = 1L;
    @OneToOne(
@@ -51,6 +48,9 @@ public class Player implements Serializable {
    @ManyToOne
    private Avatar avatar;
 
+    @Column(name = "version")
+    private Timestamp version;
+
    public boolean equals(Object o) {
       if(this == o) {
          return true;
@@ -66,43 +66,4 @@ public class Player implements Serializable {
       return Objects.hashCode(this.id);
    }
 
-   public User getUser() {
-      return this.user;
-   }
-
-   public Long getId() {
-      return this.id;
-   }
-
-   public String getName() {
-      return this.name;
-   }
-
-   public Long getScore() {
-      return this.score;
-   }
-
-   public Avatar getAvatar() {
-      return this.avatar;
-   }
-
-   public void setUser(User user) {
-      this.user = user;
-   }
-
-   public void setId(Long id) {
-      this.id = id;
-   }
-
-   public void setName(String name) {
-      this.name = name;
-   }
-
-   public void setScore(Long score) {
-      this.score = score;
-   }
-
-   public void setAvatar(Avatar avatar) {
-      this.avatar = avatar;
-   }
 }

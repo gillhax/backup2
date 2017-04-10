@@ -30,9 +30,7 @@ public class Question implements Serializable {
       strategy = GenerationType.AUTO
    )
    private Long id;
-   @Column(
-      name = "version"
-   )
+    @Column(name = "version")
    private Timestamp version;
 
    @NotNull

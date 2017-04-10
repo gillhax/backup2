@@ -1,8 +1,7 @@
 package quiz.service.dto;
 
-import java.beans.ConstructorProperties;
 import javax.validation.constraints.Size;
-import quiz.service.dto.AvatarDto;
+import java.beans.ConstructorProperties;
 
 public class PlayerDtoOut {
    Long id;
@@ -11,8 +10,12 @@ public class PlayerDtoOut {
       max = 64
    )
    String name;
+
    Long score;
+
    AvatarDto avatar;
+
+    long version;
 
    public Long getId() {
       return this.id;
@@ -46,7 +49,15 @@ public class PlayerDtoOut {
       this.avatar = avatar;
    }
 
-   public PlayerDtoOut() {
+    public void setVersion(long version) {
+        this.version = version;
+    }
+
+    public long getVersion() {
+        return this.version;
+    }
+
+    public PlayerDtoOut() {
    }
 
    @ConstructorProperties({"id", "name", "score", "avatar"})

@@ -26,6 +26,7 @@ import quiz.system.error.ApiAssert;
 import quiz.web.rest.vm.ManagedCreateUserVM;
 
 import javax.inject.Inject;
+import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.util.*;
 
@@ -114,6 +115,7 @@ public class UserService {
       player.setId(savedUser.getId());
       player.setName(managedCreateUserVM.getName());
       player.setScore(Long.valueOf(0L));
+       player.setVersion(new Timestamp(System.currentTimeMillis()));
       if(managedCreateUserVM.getAvatarId() != null) {
          Avatar avatar = (Avatar)this.avatarRepository.findOne(managedCreateUserVM.getAvatarId());
          ApiAssert.notFound(avatar == null, "not-found.avatar");

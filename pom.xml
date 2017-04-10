@@ -11,7 +11,7 @@
 
     <groupId>quiz</groupId>
     <artifactId>quiz</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>api</version>
     <packaging>war</packaging>
     <name>Quiz</name>
 

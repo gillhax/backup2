@@ -19,7 +19,7 @@ import static quiz.security.SecurityUtils.getCurrentUserId;
 @RestController
 @RequestMapping({"/api/v1/"})
 @Api(
-   tags = {"Players"}
+    tags = {"Players"}
 )
 public class PlayerController {
 
@@ -33,67 +33,64 @@ public class PlayerController {
     }
 
     @Secured({ADMIN, USER})
-   @RequestMapping(
-      value = {"/players/{id}"},
-      method = {RequestMethod.GET}
-   )
-   @ApiOperation(
-      value = "Get player information by id",
-      response = PlayerDtoOut.class
-   )
-   public ResponseDto getPlayerById(@PathVariable Long id) {
-      return StaticWrapper.wrap(this.playerService.getPlayerById(id));
-   }
+    @RequestMapping(
+        value = {"/players/{id}"},
+        method = {RequestMethod.GET}
+    )
+    @ApiOperation(
+        value = "Get player information by id",
+        response = PlayerDtoOut.class
+    )
+    public ResponseDto getPlayerById(@PathVariable Long id) {
+        return StaticWrapper.wrap(this.playerService.getPlayerById(id));
+    }
 
     @Secured({ADMIN, USER})
-   @RequestMapping(
-      value = {"/players/profile"},
-      method = {RequestMethod.GET}
-   )
-   @ApiOperation(
-      value = "Get my profile",
-      response = PlayerDtoOut.class
-   )
-   public ResponseDto getProfile() {
-       return StaticWrapper.wrap(this.playerService.getPlayerById(getCurrentUserId()));
-   }
+    @RequestMapping(value = {"/players/profile"}, method = {RequestMethod.GET})
+    @ApiOperation(
+        value = "Get my profile",
+        response = PlayerDtoOut.class
+    )
+    public ResponseDto getProfile() {
+        return StaticWrapper.wrap(this.playerService.getPlayerById(getCurrentUserId()));
+    }
 
     @Secured({ADMIN, USER})
-   @RequestMapping(
-      value = {"/players/profile"},
-      method = {RequestMethod.PUT}
-   )
-   @ApiOperation(
-      value = "Update my profile",
-      response = PlayerDtoOut.class
-   )
-   public ResponseDto updateProfile(@RequestBody @Validated PlayerDtoIn playerDtoIn) {
-       return StaticWrapper.wrap(this.playerService.updatePlayer(getCurrentUserId(), playerDtoIn));
-   }
+    @RequestMapping(
+        value = {"/players/profile"},
+        method = {RequestMethod.PUT}
+    )
+    @ApiOperation(
+        value = "Update my profile",
+        response = PlayerDtoOut.class
+    )
+    public ResponseDto updateProfile(@RequestBody @Validated PlayerDtoIn playerDtoIn) {
+        return StaticWrapper.wrap(this.playerService.updatePlayer(getCurrentUserId(), playerDtoIn));
+    }
 
-   @RequestMapping(
-      value = {"/players/top"},
-      method = {RequestMethod.GET}
-   )
-   @ApiOperation(
-       value = "Get top 100 players",
-      response = PlayerDtoOut.class
-   )
-   public ResponseDto getPlayersTop() {
-       Long userId = getCurrentUserId();
-      return StaticWrapper.wrap(this.playerService.getPlayersTop(userId));
-   }
+    @RequestMapping(
+        value = {"/players/top"},
+        method = {RequestMethod.GET}
+    )
+    @ApiOperation(
+        value = "Get top 100 players",
+        response = PlayerDtoOut.class
+    )
+    public ResponseDto getPlayersTop() {
+        Long userId = getCurrentUserId();
+        return StaticWrapper.wrap(this.playerService.getPlayersTop(userId));
+    }
 
     @Secured({ADMIN, USER})
-   @RequestMapping(
-      value = {"/players/profile/score"},
-      method = {RequestMethod.GET}
-   )
-   @ApiOperation(
-      value = "Get my score",
-      response = Long.class
-   )
-   public ResponseDto getProfileScore() {
-       return StaticWrapper.wrap(this.playerService.getProfileScore(getCurrentUserId()));
-   }
+    @RequestMapping(
+        value = {"/players/profile/score"},
+        method = {RequestMethod.GET}
+    )
+    @ApiOperation(
+        value = "Get my score",
+        response = Long.class
+    )
+    public ResponseDto getProfileScore() {
+        return StaticWrapper.wrap(this.playerService.getProfileScore(getCurrentUserId()));
+    }
 }

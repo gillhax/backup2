@@ -21,6 +21,7 @@ public class PlayerConverter extends Converter2Args<Player, PlayerDtoIn, PlayerD
             PlayerDtoOut playerDto = new PlayerDtoOut();
             playerDto.setAvatar(this.avatarConverter.toDTO(player.getAvatar()));
             playerDto.setName(player.getName());
+            playerDto.setVersion(player.getVersion().getTime());
             playerDto.setScore(player.getScore());
             playerDto.setId(player.getId());
             return playerDto;
