@@ -76,10 +76,10 @@ public class CategoryService {
     }
 
     /**
-     *  Get one category by id.
+     * Get one category by id.
      *
-     *  @param id the id of the entity
-     *  @return the entity
+     * @param id the id of the entity
+     * @return the entity
      */
     @Transactional(readOnly = true)
     public Category findOne(Long id) {
@@ -89,9 +89,9 @@ public class CategoryService {
     }
 
     /**
-     *  Delete the  category by id.
+     * Delete the  category by id.
      *
-     *  @param id the id of the entity
+     * @param id the id of the entity
      */
     public void delete(Long id) {
         log.debug("Request to delete Category : {}", id);

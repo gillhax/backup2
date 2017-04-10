@@ -13,7 +13,7 @@
                 parent: 'entity',
                 url: '/offer?page&sort&search',
                 data: {
-                    authorities: ['ROLE_USER'],
+                    authorities: ['ROLE_ADMIN'],
                     pageTitle: 'quizApp.offer.home.title'
                 },
                 views: {
@@ -55,7 +55,7 @@
                 parent: 'entity',
                 url: '/offer/{id}',
                 data: {
-                    authorities: ['ROLE_USER'],
+                    authorities: ['ROLE_ADMIN'],
                     pageTitle: 'quizApp.offer.detail.title'
                 },
                 views: {
@@ -87,7 +87,7 @@
                 parent: 'offer',
                 url: '/{id}/delete',
                 data: {
-                    authorities: ['ROLE_USER']
+                    authorities: ['ROLE_ADMIN']
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                     $uibModal.open({
@@ -111,7 +111,7 @@
                 parent: 'offer-detail',
                 url: '/image/',
                 data: {
-                    authorities: ['ROLE_USER']
+                    authorities: ['ROLE_ADMIN']
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                     $uibModal.open({

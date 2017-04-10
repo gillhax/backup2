@@ -76,14 +76,14 @@ public class CategoryResource {
    public ResponseEntity getCategory(@PathVariable Long id) {
       this.log.debug("REST request to get Category : {}", id);
       Category category = this.categoryService.findOne(id);
-      return (ResponseEntity)Optional.ofNullable(category).map((result) -> {
+       return Optional.ofNullable(category).map((result) -> {
          return new ResponseEntity(result, HttpStatus.OK);
       }).orElse(new ResponseEntity(HttpStatus.NOT_FOUND));
    }
 
    @DeleteMapping({"/categories/{id}"})
    @Timed
-   public ResponseEntity deleteCategory(@PathVariable Long id) {
+   public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
       this.log.debug("REST request to delete Category : {}", id);
       this.categoryService.delete(id);
       this.versionService.refreshCategories();

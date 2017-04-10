@@ -53,6 +53,8 @@ spring:
                 prepStmtCacheSqlLimit: 2048
                 useServerPrepStmts: true
     jpa:
+        hibernate:
+            ddl-auto: validate
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         database: MYSQL
         show-sql: true
@@ -69,8 +71,6 @@ spring:
     thymeleaf:
         cache: false
 
-liquibase:
-    contexts: prod
 
 server:
     port: 8080
