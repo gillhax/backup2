@@ -20,7 +20,9 @@ import quiz.service.MediaContainerService;
 import quiz.service.VersionService;
 import quiz.system.error.ApiAssert;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,10 +50,18 @@ public class ParseQuestionsFile {
         this.versionService = versionService;
     }
 
+    private String convertEncodingFileName(String fileName) {
+        try {
+
+            return new String(fileName.getBytes("ISO-8859-1"), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return fileName;
+        }
+    }
+
 
     public void main(List<MultipartFile> files) {
         XSSFWorkbook workbook = null;
-
         HashMap<String, MultipartFile> filesDictionary = new HashMap<>();
 
         MultipartFile excelMultipartFile = null;
@@ -59,7 +69,7 @@ public class ParseQuestionsFile {
 
         while (filesIterator.hasNext()) {
             MultipartFile file = (MultipartFile) filesIterator.next();
-            String categorySheet = file.getOriginalFilename();
+            String categorySheet = convertEncodingFileName(file.getOriginalFilename());
             if (FilenameUtils.getExtension(categorySheet).equals("xlsx")) {
                 excelMultipartFile = file;
             } else {
@@ -72,14 +82,7 @@ public class ParseQuestionsFile {
         }
 
         try {
-            File var31 = new File(excelMultipartFile.getOriginalFilename());
-            var31.createNewFile();
-            FileOutputStream var33 = new FileOutputStream(var31);
-            var33.write(excelMultipartFile.getBytes());
-            var33.close();
-            FileInputStream excelFile = new FileInputStream(var31);
-            workbook = new XSSFWorkbook(excelFile);
-
+            workbook = new XSSFWorkbook(excelMultipartFile.getInputStream());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -184,12 +187,18 @@ public class ParseQuestionsFile {
         while (iterator.hasNext()) {
             Row currentRow = iterator.next();
             Iterator<Cell> cellIterator = currentRow.iterator();
-            cellIterator.next();
             Question question = new Question();
             //title
             if (cellIterator.hasNext()) {
                 Cell currentCell = cellIterator.next();
-                question.setTitle(optimizeBreakLine(validateCellValue(currentCell)));
+
+                String value = optimizeBreakLine(validateCellValue(currentCell));
+                if (value != null && !value.equals("")) {
+                    question.setTitle(value);
+                } else {
+                    Cell nextCurrentCell = cellIterator.next();
+                    question.setTitle(optimizeBreakLine(validateCellValue(nextCurrentCell)));
+                }
             } else {
                 continue;
             }
@@ -227,13 +236,18 @@ public class ParseQuestionsFile {
                 continue;
             }
 
+
+            boolean rightSubcategory = false;
             //Set Subcategory
             if (cellIterator.hasNext()) {
                 //Category
                 validateCellValue(cellIterator.next());
                 //Subcategory
                 String subcategoryName = validateCellValue(cellIterator.next());
-                question.setSubcategory(subcategoriesMap.get(subcategoriesDictionary.get(subcategoryName)));
+                if (subcategoriesDictionary.containsKey(subcategoryName)) {
+                    question.setSubcategory(subcategoriesMap.get(subcategoriesDictionary.get(subcategoryName)));
+                    rightSubcategory = true;
+                }
             } else {
                 continue;
             }
@@ -260,11 +274,14 @@ public class ParseQuestionsFile {
 
                 }
             }
+            if (rightSubcategory) {
+                questions.add(question);
+            } else {
+                ApiAssert.unprocessable(true, "Не верно указана семья в " + currentRow.getRowNum() + "-ой строке Excel файла");
+            }
         }
 
-
-        for (Question question :
-            questions) {
+        for (Question question : questions) {
             if (question.getTitle().equals("")) {
                 continue;
             }
@@ -277,20 +294,6 @@ public class ParseQuestionsFile {
         }
 
         versionService.refreshQuestions();
-//        for (Category category:
-//             categories) {
-//            Category existCategory = categoryRepository.findOne(category.getId());
-//            if(existCategory == null) {
-//                categoryRepository.saveAndFlush(category);
-//            }
-//            for (Subcategory subcategory:
-//                category.getSubcategories()) {
-//                Subcategory existSubcategory = subcategoryRepository.findOne(subcategory.getId());
-//                if(existSubcategory == null) {
-//                    subcategoryRepository.saveAndFlush(subcategory);
-//                }
-//            }
-//        }
 
     }
 

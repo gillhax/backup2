@@ -27,13 +27,22 @@
             _authenticated = identity !== null;
         }
 
+
+        function arrayObjectIndexOf(myArray, searchTerm, property) {
+            for (var i = 0, len = myArray.length; i < len; i++) {
+                if (myArray[i][property] === searchTerm) return i;
+            }
+            return undefined;
+        }
+
         function hasAnyAuthority (authorities) {
             if (!_authenticated || !_identity || !_identity.authorities) {
                 return false;
             }
 
             for (var i = 0; i < authorities.length; i++) {
-                if (_identity.authorities.indexOf(authorities[i]) !== -1) {
+                var check = arrayObjectIndexOf(_identity.authorities, authorities[i], "name");
+                if (angular.isDefined(check)) {
                     return true;
                 }
             }
